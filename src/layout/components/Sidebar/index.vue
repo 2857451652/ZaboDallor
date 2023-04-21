@@ -25,6 +25,9 @@ import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 
 export default {
+  mounted() {
+    this.sidebar.opened = false
+  },
   components: { SidebarItem, Logo },
   computed: {
     ...mapGetters([

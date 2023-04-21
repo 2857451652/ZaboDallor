@@ -17,9 +17,13 @@
               <el-row style="">
                 <span style="float: left; margin-top:8px">SATELLITE: </span>
                 <span style="float: right;">
-                  <el-select v-model="settings.sate_id" placeholder="Choose your Satellite" style="width: 120px;">
+                  <el-select v-model="settings.sate_id" placeholder="Choose your Satellite" 
+                  style="width: 120px;" @change="showSate">
+                  <el-option label="宝酝号" value="宝酝号"></el-option>
+                  <el-option label="创星雷神号" value="创星雷神号"></el-option>
+                  <el-option label="丽泽一号" value="丽泽一号"></el-option>
+                  <el-option label="元光号" value="元光号"></el-option>
                   <el-option label="北邮一号" value="北邮一号"></el-option>
-                  <el-option label="others" value="others"></el-option>
                 </el-select>
               </span>
               </el-row>
@@ -172,14 +176,17 @@ export default {
     Coord,
     BoxCard,
   },
+  mounted() {
+    this.clickRotate()
+  },
   data() {
     return {
       settings:{
         sate_id: "北邮一号",
         auto_rotate:true,
         show_orbit:false,
-        show_coverage:true,
-        time_before: new Date(),
+        show_coverage:false,
+        time_before: new Date(Date.now()-60*60*1000),
         time_after: new Date(Date.now()+60*60*1000),
         cover_angle:25,
       },
@@ -193,7 +200,7 @@ export default {
         speed:420,
       },
 
-      show_sate:true,
+      show_sate:false,
       show_station:false,
       sate_opacity:0.7,
     }
@@ -215,6 +222,18 @@ export default {
       this.data = data
     },
     showSate(){
+      if(this.show_sate)
+      {
+        this.$refs.world.chooseSate(this.settings.sate_id)
+        this.$refs.world.switchOrbit()
+      }
+      else
+      {
+        this.settings.show_orbit = false
+        this.settings.show_coverage = false
+        this.$refs.world.unchooseSate()
+        this.$refs.world.switchOrbit()
+      }
     },
     showStation(){
     },
