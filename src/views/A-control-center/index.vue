@@ -1,21 +1,21 @@
 <template>
-  <div class="dashboard-editor-container">
-    <el-row style="text-align:center;">
-        <world ref="world" style="height: 700px;" :settings="settings" @data="getData"/>
-        <span style="position: absolute; top:2%; left:32%; font-size:35px; color:#ffffff">
-          <i class="el-icon-s-help" style="margin-right:10px" />TianSuan Constellation
+  <div class="container">
+    <div style="text-align:center;height:700px">
+        <world ref="world" style="height:100%;" :settings="settings" @data="getData"/>
+        <span style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;">
+          <i class="el-icon-s-help" style="margin-right:10px" />天 算 星 座
         </span>
         <transition name="el-fade-in">
           <div class="left-div" v-if="show_sate">
-            <el-card shadow="always" class="sate-card" :style="{'opacity':sate_opacity}">
+            <el-card shadow="always" class="sate-card">
               <div slot="header" style="height: 10px;">
-                <span style="font-size:18px; color:#409EFF">
+                <span style="font-size:18px; color:#409EFF;font-weight: bold;">
                   <i class="el-icon-position"/>
-                  SATELLITE TRACKER
+                  卫星追踪器
                 </span>
               </div>
-              <el-row style="">
-                <span style="float: left; margin-top:8px">SATELLITE: </span>
+              <el-row>
+                <span style="float: left; margin-top:8px">卫星名称: </span>
                 <span style="float: right;">
                   <el-select v-model="settings.sate_id" placeholder="Choose your Satellite" 
                   style="width: 120px;" @change="showSate">
@@ -28,39 +28,39 @@
               </span>
               </el-row>
               <el-row style="margin-top: 15px;text-align:right;">
-                <span style="float: left;">LOCAL TIME: </span>
+                <span style="float: left;">当地时间: </span>
                 <span style="font-size:5px;">{{data.time}}</span>
               </el-row>
               <el-row style="margin-top: 15px;text-align:right;">
-                <span style="float: left;">UTC TIME: </span>
+                <span style="float: left;">UTC时间: </span>
                 <span style="font-size:5px;">{{data.utc_time}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">LATITUDE: </span>
+                <span style="float: left;">
+                  <i class="el-icon-map-location" style="margin-right:5px" />纬   度: </span>
                 <span style="float: right;">{{data.latitude}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">LONGITUDE:</span>
+                <span style="float: left;">
+                  <i class="el-icon-map-location" style="margin-right:5px" />经   度：</span>
                 <span style="float: right;">{{data.longitude}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">ALTITUDE:</span>
+                <span style="float: left;">
+                  <i class="el-icon-d-caret" style="margin-right:5px" />高   度：</span>
                 <span style="float: right;">{{data.altitude}} KM</span>
               </el-row>
-              <!-- <el-row style="margin-top: 15px;">
-                <span style="float: left;">SPEED:</span>
-                <span style="float: right;">{{data.speed}} KM/s</span>
-              </el-row> -->
             </el-card>
             <el-card shadow="always" class="station-card">
-              
               <el-row>
-                <span style="float: left; margin-top:8px">ANGLE(°):</span>
-                <el-input-number v-model="settings.cover_angle" :min="15" :max="50" style="width: 120px;" @change="clickCover">
+                <span style="float: left; margin-top:8px">观测角(°)：</span>
+                <el-input-number v-model="settings.cover_angle" :min="1" :max="50" style="width: 120px;" @change="clickCover">
                 </el-input-number>
               </el-row>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">SHOW COVERAGE:</span>
+                <span style="float: left;">
+                  <i class="el-icon-pie-chart"/>
+                  显示覆盖范围：</span>
                 <span style="float: right;">
                   <el-switch
                     v-model="settings.show_coverage" @change="clickCover">
@@ -70,11 +70,14 @@
               
               <el-divider></el-divider>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">ORBIT PERIOD:</span>
+                <span style="float: left;">
+                  <i class="el-icon-alarm-clock"/>
+                  设置轨迹始末时间：
+                </span>
               </el-row>
               <el-row style="margin-top: 10px;">
                 <div style="float: right;">
-                  <span>from </span>
+                  <span>始：</span>
                   <el-tooltip class="item" effect="dark" content="Time period before now" placement="right">
                     <el-time-picker
                       v-model="settings.time_before"
@@ -86,7 +89,7 @@
               </el-row>
               <el-row style="margin-top: 5px;">
                 <div style="float: right;">
-                  <span>to </span>
+                  <span>末：</span>
                   <el-tooltip class="item" effect="dark" content="Time period after now" placement="right">
                     <el-time-picker
                       arrow-control
@@ -98,7 +101,10 @@
                 </div>
               </el-row>
               <el-row style="margin-top: 15px;">
-                <span style="float: left;">SHOW ORBIT:</span>
+                <span style="float: left;">
+                  <i class="el-icon-video-camera"/>
+                  显示卫星轨迹：
+                </span>
                 <span style="float: right;">
                   <el-switch
                     v-model="settings.show_orbit" @change="clickOrbit">
@@ -118,7 +124,7 @@
             <el-row >
               <span style="float: left;">
                 <i class="el-icon-position"/>
-                Satellite Info:
+                显示卫星信息：
               </span>
               <span style="float: right;">
                 <el-switch
@@ -129,7 +135,7 @@
             <el-row style="margin-top: 15px;">
               <span style="float: left;">
                 <i class="el-icon-place"/>
-                Station Info:
+                显示地面站信息：
               </span>
               <span style="float: right;">
                 <el-switch
@@ -139,8 +145,8 @@
             </el-row>
             <el-row style="margin-top: 15px;">
               <span style="float: left;">
-                <i class="el-icon-refresh-left"/>
-                Auto Rotate:
+                <i class="el-icon-refresh-right"/>
+                自动旋转：
               </span>
               <span style="float: right;">
                 <el-switch
@@ -149,32 +155,90 @@
               </span>
             </el-row>
           </el-card>
+          <transition name="el-fade-in">
+            <div v-if="show_station">
+            <el-card shadow="always" class="station-card" >
+              <div slot="header" style="height: 10px;">
+                <span style="font-size:18px; color:#409EFF;font-weight: bold;">
+                  <i class="el-icon-place"/>
+                  地面站信息
+                </span>
+              </div>
+              <el-row>
+                <span style="float: left; margin-top:8px">地面站名称: </span>
+                <span style="float: right;">
+                  <el-select placeholder="选择地面站" 
+                  style="width: 120px;" v-model="station_name" @change="changeStation">
+                  <el-option :label="station_info[0].station" value="0"></el-option>
+                  <el-option :label="station_info[1].station" value="1"></el-option>
+                  <el-option :label="station_info[2].station" value="2"></el-option>
+                  <el-option :label="station_info[3].station" value="3"></el-option>
+                  <el-option :label="station_info[4].station" value="4"></el-option>
+                  <el-option :label="station_info[5].station" value="5"></el-option>
+                  <el-option :label="station_info[6].station" value="6"></el-option>
+                </el-select>
+              </span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: left;">
+                  <i class="el-icon-user" style="margin-right:5px" />
+                  归属机构: 
+                </span>
+                <span style="float: right;">天仪研究院</span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: left;">
+                  <i class="el-icon-map-location" style="margin-right:5px" />
+                  纬 度: 
+                </span>
+                <span style="float: right;">{{station_info[chosen_station].lat}}</span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: left;">
+                  <i class="el-icon-map-location" style="margin-right:5px" />
+                  经 度：
+                </span>
+                <span style="float: right;">{{station_info[chosen_station].lon}}</span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: left;">
+                  <i class="el-icon-d-caret" style="margin-right:5px" />
+                  海 拔：
+                </span>
+                <span style="float: right;">{{station_info[chosen_station].alt}}m</span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: right;">
+                  <el-button type="text" @click="jumpToDetails">详细信息</el-button>
+                </span>
+              </el-row>
+            </el-card>
+            </div>
+            
+          </transition>
+          
         </div>
-    </el-row>
+      </div>
   </div>
 </template>
 
 <script>
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
+//import PanelGroup from './components/PanelGroup'
+//import LineChart from './components/LineChart'
 // import RaddarChart from './components/RaddarChart'
 // import PieChart from './components/PieChart'
 // import BarChart from './components/BarChart'
 // import TransactionTable from './components/TransactionTable'
 // import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
+//import BoxCard from './components/BoxCard'
 import World from './components/world'
-import Coord from './components/Coord'
+//import Coord from './components/Coord'
 
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    PanelGroup,
-    LineChart,
     World,
-    Coord,
-    BoxCard,
   },
   mounted() {
     this.clickRotate()
@@ -197,12 +261,22 @@ export default {
         longitude: 100.1234,
         latitude: 30.2132,
         altitude: 500,
-        speed:420,
       },
 
       show_sate:false,
       show_station:false,
       sate_opacity:0.7,
+      station_info:[
+        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520},
+        {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:9627},
+        {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:3486},
+        {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:14237},
+        {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:7546},
+        {station:"库尔勒站", lon:86.17, lat:41.72, alt:934, antenna:"Cross Yagi (UHF)", success_rate:0.88, observation:15352},
+        {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520},
+      ],
+      chosen_station: 0,
+      station_name: "黑河站",
     }
   },
   methods: {
@@ -236,32 +310,36 @@ export default {
       }
     },
     showStation(){
+      if(this.show_station)
+        this.$refs.world.chooseSation(this.chosen_station)
+      else
+        this.$refs.world.unchooseSation()
+    },
+    changeStation(value){
+      this.chosen_station = parseInt(value)
+      this.$refs.world.chooseSation(this.chosen_station)
     },
     overConsole(){
       console.log("hi")
+    },
+    jumpToDetails(){
+      this.$router.push({ name: 'station',
+                          query:{
+                            chosen:this.chosen_station
+                          }})
     }
   }
 }
 </script>
 
-<style lang="scss">
-.dashboard-editor-container {
+<style lang="scss" scoped>
+.container {
   //background-color: rgb(240, 242, 245);
   background-color: rgb(1, 12, 24);
   position: relative;
+  height: 100%;
+  width: 100%;
 
-  .github-corner {
-    position: absolute;
-    top: 0px;
-    border: 0;
-    right: 0;
-  }
-
-  .chart-wrapper {
-    background: #ffffff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
-  }
 }
 
 .left-div{
@@ -280,7 +358,7 @@ export default {
   width: 250px;
   height: auto;
   background:#ffffff;
-  font-family: 'Helvetica Neue';
+  opacity: 0.7;
 }
 .station-card {
   width: 250px;
@@ -297,9 +375,4 @@ export default {
   opacity: 0.7;
 }
 
-@media (max-width:1024px) {
-  .chart-wrapper {
-    padding: 8px;
-  }
-}
 </style>

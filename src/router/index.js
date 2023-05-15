@@ -78,8 +78,20 @@ export const constantRoutes = [
       {
         path: 'sat_orbit',
         component: () => import('@/views/A-control-center/index'),
-        name: 'Constellation',
-        meta: { title: 'Constellation', icon: 'guide', affix: true }
+        name: 'sat_orbit',
+        meta: { title: '天算星座', icon: 'guide', affix: true}
+      }
+    ]
+  },
+  {
+    path: '/station',
+    component: Layout,
+    children: [
+      {
+        path: 'station',
+        component: () => import('@/views/A-station-center/index'),
+        name: 'station',
+        meta: { title: '地面站信息', icon: 'el-icon-place'}
       }
     ]
   },

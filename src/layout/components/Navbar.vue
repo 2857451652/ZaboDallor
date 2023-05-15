@@ -26,16 +26,16 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile/index">
-            <el-dropdown-item>Profile</el-dropdown-item>
+            <el-dropdown-item>信息</el-dropdown-item>
           </router-link>
           <router-link to="/">
-            <el-dropdown-item>Home</el-dropdown-item>
+            <el-dropdown-item>主页</el-dropdown-item>
           </router-link>
           <a target="_blank" href="https://gitee.com/LaniakeaDG/ZaboDollar">
-            <el-dropdown-item>Gitee</el-dropdown-item>
+            <el-dropdown-item>Github</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

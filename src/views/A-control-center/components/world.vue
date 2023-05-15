@@ -1,5 +1,5 @@
 <template>
-  <div ref="refChart" style="width: 100%; height: 10.985rem" />
+  <div ref="refChart"/>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
       baseTexture: require('@/assets/images/world.jpg'),
       heightTexture: require('@/assets/images/world.jpg'),
       night: require('@/assets/images/night.jpg'),
-      cload: require('@/assets/images/clouds.png'),
+      cloud: require('@/assets/images/clouds2.png'),
       stars: require('@/assets/images/starfield.jpg'),
       //pisa: require('@/assets/pisa.hdr'),
       tail_track: [],
@@ -47,11 +47,23 @@ export default {
                   ["1 55261U 23007P   23093.85628476  .00018574  00000+0  65276-3 0  9997",
                   "2 55261  97.3598 167.3962 0009698  41.8613  69.7682 15.29378720 12017"],
                 },
+      station_loc:[
+        [127.53, 50.22, 0, "黑河站"],
+        [121.39, 37.52, 0, "天算华东站"],
+        [112.59, 28.12, 0, "长沙站"],
+        [109.45, 24.18, 0, "天算华南站"],
+        [98.50, 39.71, 0, "酒泉站"],
+        [86.17, 41.72, 0, "库尔勒站"],
+        [88.31, 43.36, 0, "达坂城站"],
+      ],
       chosen_sate: "",
       chosen_index:-1,
+      chosen_station:-1,
       chosen_coord:[115, 40],
       rotate:this.settings.autoRotate,
       base_height: 320,
+      timer1:NaN,
+      timer2:NaN,
       
       data:{
         time:100,
@@ -65,15 +77,16 @@ export default {
   },
   mounted() {
     this.init();
-    this.timer = setInterval(() => {
-      this.renewData()
-    }, 5000)
-    this.timer2 = setInterval(() => {
-      this.updateData()
-    }, 1000)
+  },
+  destroyed() {
+    clearInterval(this.timer1)
+    clearInterval(this.timer2)
+    echarts.dispose(this.myChart)
+    console.log("cleared")
   },
   methods: {
     init() {
+      console.log("comming")
       this.myChart = echarts.init(this.$refs.refChart)
       this.myChart.setOption({
         backgroundColor: '#000',
@@ -122,6 +135,9 @@ export default {
               intensity: 5,
               shadow: true,
             },
+            ambient:{
+              intensity:0.3
+            }
           },
           postEffect: {
             enable: true,
@@ -134,13 +150,31 @@ export default {
             distance: 240,
             autoRotate: this.rotate
           },
+          layers: [
+            {
+              type: 'blend',
+              blendTo: 'emission',
+              texture: this.night
+            },
+            // {
+            //   type: 'overlay',
+            //   texture: this.cloud,
+            //   shading: 'lambert',
+            //   distance: 5
+            // }
+          ]
         }],
-        
       }
 
       this.myChart.setOption(option)
       this.renewData()
       this.setSateToCenter()
+      this.timer1 = setInterval(() => {
+        this.renewData()
+      }, 15000)
+      this.timer2 = setInterval(() => {
+        this.updateData()
+      }, 1000)
     },
     stopEarth(){
       var option = this.myChart.getOption()
@@ -154,36 +188,60 @@ export default {
       this.rotate = true
       this.myChart.setOption(option)
     },
-    getCoverArea(place, angle) {
+    getCircleArea(place, angle) {
       var lon=place[0], lat=place[1], alti=place[2];
       var cot = Math.cos(Math.PI*angle/180)/Math.sin(Math.PI*angle/180)
-      var km_to_degree = 1/111
-      var radius = alti * cot * km_to_degree
+      var r = alti * cot, R = 6371;
       // generate a circle
-      var sample_rate = 32, i=0;
+      var sample_rate = 64, i=0;
       var circle = [];
+      
+      var f0, x0, y0, z0;
+      var a, a_lat = Math.PI/2 - Math.PI*lat/180, a_lon = Math.PI + Math.PI*lon/180;
       var point_lon, point_lat;
       for(i=0; i<=sample_rate; i++){
-        point_lon = lon+Math.cos(2*Math.PI*i/sample_rate)*radius/Math.cos(Math.PI*lat/180)
-        point_lat = lat+Math.sin(2*Math.PI*i/sample_rate)*radius
-        if(point_lat > 90){
-          point_lat = 90 - (point_lat-90)
-          point_lon = point_lon + 180
-        }
-        else if(point_lat < -90){
-          point_lat = -90 - (point_lat+90)
-          point_lon = point_lon + 180
-        }
-
-        if(point_lon > 180){
-          point_lon = -180 + (point_lon-180)
-        }
-        else if(point_lon < -180){
-          point_lon = 180 + (point_lon+180)
-        }
+        a = 2*Math.PI*i/sample_rate
+        f0 = Math.asin(r/R)
+        x0 = Math.sin(f0)*Math.cos(a)
+        y0 = Math.sin(f0)*Math.sin(a)
+        z0 = Math.cos(f0)
+        var vector = [x0, y0, z0]
+        vector = this.rotateVector('y', a_lat, vector)
+        vector = this.rotateVector('z', a_lon, vector)
+        point_lat = 90 - Math.acos(vector[2])*180/Math.PI
+        var lon_angle = Math.atan(vector[1]/vector[0])
+        if(vector[0]<0)
+          lon_angle += Math.PI
+        point_lon = -180 + lon_angle*180/Math.PI
         circle.push([point_lon, point_lat, this.base_height])
       }
       return [circle]
+    },
+    rotateVector(axis, a, vector){
+      var matrix = []
+      if(axis == 'z'){
+        matrix = [
+          [Math.cos(a), -Math.sin(a), 0],
+          [Math.sin(a), Math.cos(a), 0],
+          [0, 0, 1],
+        ]
+      }
+      else if(axis == 'y'){
+        matrix = [
+          [Math.cos(a), 0, Math.sin(a)],
+          [0, 1, 0],
+          [-Math.sin(a), 0, Math.cos(a)],
+        ]
+      }
+      var i, j, vector_new = [];
+      for(i=0; i<3; i++){
+        var value=0;
+        for(j=0; j<3; j++){
+          value += matrix[i][j] * vector[j]
+        }
+        vector_new.push(value)
+      }
+      return vector_new
     },
     getOrbitPoint(tle, time) {
       // Sample TLE
@@ -214,27 +272,6 @@ export default {
           latitude  = satellite.degreesLat(latitude);
 
       return [longitude, latitude, height]
-    },
-    getSpeed(tle, time){
-        // Sample TLE
-        var tleLine1 = tle[0],
-            tleLine2 = tle[1];
-      
-      // 初始化一条卫星记录
-      var satrec = satellite.twoline2satrec(tleLine1, tleLine2);
-
-      //  或者你可以使用JavaScript日期
-      var positionAndVelocity = satellite.propagate(satrec, time);
-
-      var positionEci = positionAndVelocity.position;
-
-      // 将GMT中国时、Julindate时转成格林尼治恒星时
-      var gmst = satellite.gstime(time);
-
-      // 你可以得到ECF，大地测量，观察角度和多普勒因子。
-      var positionGd = satellite.eciToGeodetic(positionEci, gmst);
-
-      return positionGd.velocity;
     },
     getTailTrack(tle, now_time) {
       var orbitData = [];
@@ -284,6 +321,16 @@ export default {
       this.chosen_index = -1
       this.renewData()
     },
+    chooseSation(id){
+      this.chosen_coord = [this.station_loc[id][0], this.station_loc[id][1]]
+      this.chosen_station = id
+      this.renewData()
+      this.setSateToCenter()
+    },
+    unchooseSation(){
+      this.chosen_station = -1
+      this.renewData()
+    },
     setSateToCenter(){
       var option = this.myChart.getOption()
       var set_center = {
@@ -309,16 +356,14 @@ export default {
         data.longitude = place[0].toFixed(4)
         data.latitude = place[1].toFixed(4)
         data.altitude = place[2].toFixed(1)
-        data.speed = this.getSpeed(tle, time)
         this.$emit('data', data)
       }
     },
-    sateOption(time, sate_name, chosen=0){
-      var data = {}
+    sateOption(time, sate_name){
       var tle = this.sate_TLE[sate_name]
       var place = this.getOrbitPoint(tle, time)
       var tail_track = this.getTailTrack(tle, time)
-      var circle = this.getCoverArea(place, this.settings.cover_angle);
+      var circle = this.getCircleArea(place, this.settings.cover_angle);
       var ret = {
         "sate_pos":place,
         "tail_track":tail_track,
@@ -327,24 +372,25 @@ export default {
       return ret
     },
     renewData() {
-      var time = new Date()
+      var time = new Date(Date.now())
       var sate_pos = [], tail_track = []
       var circle;
       for(var sate_name in this.sate_TLE)
       {
-        var chosen = (this.chosen_sate == sate_name)
-        var ret = this.sateOption(time, sate_name, chosen)
+        var ret = this.sateOption(time, sate_name)
         var sate_place = ret["sate_pos"]
-        if(chosen){
+        
+        if(this.chosen_sate == sate_name){
           circle = ret["circle"]
           this.chosen_index = sate_pos.length
           this.chosen_coord = [sate_place[0], sate_place[1]]
+          console.log(sate_place)
+          console.log(circle)
         }
         sate_place.push(sate_name)
         sate_pos.push(sate_place)
         tail_track = tail_track.concat(ret["tail_track"])
       }
-      //sate_pos = sate_pos.push(sate_pos[0])
       this.myChart.setOption({
         series: [
           ///////////////////////////没有被选中的卫星///////////////////////
@@ -403,6 +449,19 @@ export default {
           },
           data: sate_pos
         }, // 卫星图案
+        ///////////////////////////地面站///////////////////////
+        {
+          type: 'scatter3D',
+          coordinateSystem: 'globe',
+          symbolSize: 6,
+          itemStyle: {
+            color: params => {
+                return params.dataIndex === this.chosen_station ? 'rgb(178, 34, 34)':'rgb(255,227,132)' // set color based on data index
+              },
+            opacity: 1
+          },
+          data: this.station_loc
+        },
         ///////////////////////////被选中的卫星///////////////////////
         {
           type: 'lines3D',
@@ -421,12 +480,13 @@ export default {
           coordinateSystem: 'globe',
           polyline: true,
           lineStyle: {
-            color: '#E6A23C',
+            color: '#F56C6C',
             width: 2,
             opacity: 0.8
           },
           data: (this.settings.show_coverage)?circle:[],
         }, // 覆盖范围的圈圈
+        
       ]
       });
     }
