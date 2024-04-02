@@ -1,6 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
-
+  title: '北邮天算星座展示平台',
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel

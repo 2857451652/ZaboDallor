@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div style="text-align:center;height:700px">
+    <div style="text-align:center;height:100%">
         <world ref="world" style="height:100%;" :settings="settings" @data="getData"/>
         <span style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;">
           <i class="el-icon-s-help" style="margin-right:10px" />天 算 星 座
@@ -11,7 +11,7 @@
               <div slot="header" style="height: 10px;">
                 <span style="font-size:18px; color:#409EFF;font-weight: bold;">
                   <i class="el-icon-position"/>
-                  卫星追踪器
+                  卫星状态
                 </span>
               </div>
               <el-row>
@@ -145,6 +145,17 @@
             </el-row>
             <el-row style="margin-top: 15px;">
               <span style="float: left;">
+                <i class="el-icon-finished"/>
+                显示运行尾迹：
+              </span>
+              <span style="float: right;">
+                <el-switch
+                  v-model="settings.tail" @change="clickCover">
+                </el-switch>
+              </span>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
                 <i class="el-icon-refresh-right"/>
                 自动旋转：
               </span>
@@ -182,9 +193,9 @@
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
                   <i class="el-icon-user" style="margin-right:5px" />
-                  归属机构: 
+                  使用方式: 
                 </span>
-                <span style="float: right;">天仪研究院</span>
+                <span style="float: right;">{{station_info[chosen_station].cate}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
@@ -248,6 +259,7 @@ export default {
       settings:{
         sate_id: "北邮一号",
         auto_rotate:true,
+        tail:true,
         show_orbit:false,
         show_coverage:false,
         time_before: new Date(Date.now()-60*60*1000),
@@ -267,13 +279,13 @@ export default {
       show_station:false,
       sate_opacity:0.7,
       station_info:[
-        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520},
-        {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:9627},
-        {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:3486},
-        {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:14237},
-        {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:7546},
-        {station:"库尔勒站", lon:86.17, lat:41.72, alt:934, antenna:"Cross Yagi (UHF)", success_rate:0.88, observation:15352},
-        {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520},
+        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520, cate:"部署服务器"},
+        {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:9627, cate:"共建"},
+        {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:3486, cate:"部署服务器"},
+        {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:14237, cate:"共享"},
+        {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:7546, cate:"部署服务器"},
+        {station:"库尔勒站", lon:86.17, lat:41.72, alt:934, antenna:"Cross Yagi (UHF)", success_rate:0.88, observation:15352, cate:"部署服务器"},
+        {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520, cate:"部署服务器"},
       ],
       chosen_station: 0,
       station_name: "黑河站",
@@ -311,13 +323,13 @@ export default {
     },
     showStation(){
       if(this.show_station)
-        this.$refs.world.chooseSation(this.chosen_station)
+        this.$refs.world.chooseStation(this.chosen_station)
       else
-        this.$refs.world.unchooseSation()
+        this.$refs.world.unchooseStation()
     },
     changeStation(value){
       this.chosen_station = parseInt(value)
-      this.$refs.world.chooseSation(this.chosen_station)
+      this.$refs.world.chooseStation(this.chosen_station)
     },
     overConsole(){
       console.log("hi")
@@ -336,10 +348,10 @@ export default {
 .container {
   //background-color: rgb(240, 242, 245);
   background-color: rgb(1, 12, 24);
-  position: relative;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
   width: 100%;
-
 }
 
 .left-div{

@@ -3,9 +3,15 @@ const tokens = {
   admin: {
     token: 'admin-token'
   },
+  TianSuan: {
+    token: 'admin-token'
+  },
   editor: {
     token: 'editor-token'
-  }
+  },
+  // user: {
+  //   token: 'editor-token'
+  // }
 }
 
 const users = {
@@ -13,7 +19,7 @@ const users = {
     roles: ['admin'],
     introduction: 'I am a super administrator',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Super Admin'
+    name: 'TianSuan'
   },
   'editor-token': {
     roles: ['editor'],
@@ -30,13 +36,21 @@ module.exports = [
     type: 'post',
     response: config => {
       const { username } = config.body
-      const token = tokens[username]
+      const token = {
+        token: 'admin-token'
+      }
 
+      // console.log(config.body, tokens[username], tokens['admin'])
+      // if(!(username in tokens)){
+      //   token = {
+      //     token: 'editor-token'
+      //   }
+      // }
       // mock error
       if (!token) {
         return {
           code: 60204,
-          message: 'Account and password are incorrect.'
+          message: '账户密码错误'
         }
       }
 
@@ -59,7 +73,7 @@ module.exports = [
       if (!info) {
         return {
           code: 50008,
-          message: 'Login failed, unable to get user details.'
+          message: '无法获取用户信息，登录失败'
         }
       }
 

@@ -48,7 +48,7 @@ export default {
     })
     this.timer = window.setInterval(() => {
       setTimeout(() => { this.setRandom() }, 0)
-    }, 2000)
+    }, 5000)
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -69,7 +69,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['used', 'leisure']
+          data: ['占用', '空闲']
         },
         series: [
           {
@@ -79,8 +79,8 @@ export default {
             radius: [0, 60],
             center: ['50%', '38%'],
             data: [
-              { value: this.leisure, name: 'leisure' },
-              { value: this.used, name: 'used' }
+              { value: this.leisure, name: '空闲' },
+              { value: this.used, name: '占用' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

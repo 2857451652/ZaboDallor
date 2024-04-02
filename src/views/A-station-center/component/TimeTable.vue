@@ -74,7 +74,9 @@ export default {
     generateList(){
       var count=0;
       var now_time = new Date();
-      var time_stamp = 0;
+      var off_set = -2
+      now_time.setHours(now_time.getHours() + off_set);
+      var time_stamp = off_set*60;
       var station_loc = [this.station_info[parseInt(this.chosen_station)].lon,
                          this.station_info[parseInt(this.chosen_station)].lat]
       var passing = {"宝酝号":0,"创星雷神号":0,"丽泽一号":0,"元光号":0,"北邮一号":0}
@@ -109,8 +111,10 @@ export default {
               passing[name] = 1
               if(time_stamp==0)
                 data_record[name].status = "正在过境"
-              else
+              else if(time_stamp>=0)
                 data_record[name].status = "未过境"
+              else
+                data_record[name].status = "已过境"
               data_record[name].start = new Date(now_time)
               data_record[name].time_15 += 1
             }

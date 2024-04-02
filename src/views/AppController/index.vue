@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-row style="margin-bottom:10px">
-      <span style="font-size:30px; color:#1f1f1f">Satellite Application Management</span>
+      <span style="font-size:30px; color:#1f1f1f">星载应用管理</span>
       <span style="size:10px; margin-left: 10px; color: #2ac06d">
         <i class="el-icon-success" />
-        normal</span>
+        状态正常</span>
     </el-row>
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="ID" style="width: 400px;" class="filter-item" @keyup.enter.native="handleFilter" />
@@ -15,10 +15,10 @@
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Search
+        查询
       </el-button>
       <el-button class="filter-item" style="float:right;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        New Application
+        新建
       </el-button>
 
     </div>
@@ -27,39 +27,39 @@
       style="width: 100%"
     >
       <el-table-column
-        label="Process ID"
+        label="进程ID"
         prop="id"
       />
       <el-table-column
-        label="Status"
+        label="进程状态"
         prop="state"
       />
       <el-table-column
-        label="Phase"
+        label="运行阶段"
         prop="phase"
       />
       <el-table-column
-        label="Create Time"
+        label="创建时间"
         prop="createTime"
       />
       <el-table-column
-        label="Update Time"
+        label="更新时间"
         prop="updateTime"
       />
       <el-table-column
-        label="Description"
+        label="进程描述"
         prop="description"
       />
       <el-table-column label="Operation" align="center" width="230" class-name="small-padding fixed-width">
         <template>
           <el-button type="primary" size="mini" @click="handleUpdate()">
-            Modify
+            修改
           </el-button>
           <el-button size="mini" type="success" @click="handleModifyStatus()">
-            Update
+            更新
           </el-button>
           <el-button size="mini" type="danger" @click="handleDelete()">
-            Delete
+            删除
           </el-button>
         </template>
       </el-table-column>
@@ -74,6 +74,7 @@ import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import moment from 'moment';
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -111,71 +112,91 @@ export default {
         id: '47678852',
         state: 'running',
         phase: '80%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(19, 'hours').subtract(21, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(19, 'hours').subtract(20, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '星载目标识别应用'
       }, {
         id: '125784443',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(20, 'hours').subtract(13, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(19, 'hours').subtract(15, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '图片过滤应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(20, 'hours').subtract(15, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(19, 'hours').subtract(45, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(24, 'hours').subtract(21, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(20, 'hours').subtract(34, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(24, 'hours').subtract(54, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(20, 'hours').subtract(45, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(25, 'hours').subtract(15, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(19, 'hours').subtract(24, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(25, 'hours').subtract(29, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(23, 'hours').subtract(62, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(25, 'hours').subtract(52, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(24, 'hours').subtract(26, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(26, 'hours').subtract(43, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(22, 'hours').subtract(42, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }, {
         id: '235478453',
         state: 'waiting',
         phase: '0%',
-        createTime: '2022-10-05 15:33:23',
-        updateTime: '2022-10-05 15:33:23',
+        createTime: moment().subtract(26, 'hours').subtract(39, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment().subtract(24, 'hours').subtract(26, 'minutes').
+                    format('YYYY-MM-DD HH:mm:ss'),
         description: '目标检测应用'
       }],
 
@@ -388,3 +409,9 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.app-container {
+  height: calc(100vh - 84px); /* 设置高度为视口高度的100% */
+  overflow-y: auto; /* 如果内容超过屏幕高度，显示滚动条 */
+}
+</style>

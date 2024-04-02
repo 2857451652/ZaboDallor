@@ -2,16 +2,14 @@
   <div class="user-activity">
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg'+avatarPrefix">
-        <span class="username text-muted">Iron Man</span>
+        <img class="img-circle" src="../../../assets/images/school_white.png">
+        <span class="username text-muted">BUPT</span>
         <span class="description">Shared publicly - 7:30 PM today</span>
       </div>
       <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
+        Beijing University of Posts and Telecommunications (BUPT) is a research-oriented university with information technology and telecommunications as its main feature. Founded in 1955, BUPT was originally named Beijing Institute of Posts and Telecommunications. It is the first institute of higher learning for teaching and research in the fields of posts and telecommunications. In 1993, it was authorized to rename as its present name BUPT.
+        
+        The university offers a wide range of subjects including engineering, management, humanities and sciences, and most of its subjects and disciplines are related to applied science and engineering. BUPT enjoys a nationwide reputation for innovation and excellence in advanced research and learning in information and communication technology. It serves as one of the most important teaching and research bases for information technology and telecommunication industry in China.
       </p>
       <ul class="list-inline">
         <li>
@@ -30,16 +28,12 @@
     </div>
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/9e2a5d0a-bd5b-457f-ac8e-86554616c87b.jpg'+avatarPrefix">
-        <span class="username text-muted">Captain American</span>
+        <img class="img-circle" src="../../../assets/images/school_white.png">
+        <span class="username text-muted">State Key Lab</span>
         <span class="description">Sent you a message - yesterday</span>
       </div>
       <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
+        The National Key Laboratory of Networking and Switching Technology, affiliated with Beijing University of Posts and Telecommunications, was approved by the State Planning Commission/State Education Commission in 1988 as one of the first national key laboratories under the World Bank loan key discipline development project. In 1989, the State Planning Commission approved the laboratory construction project, and in 1990, the laboratory construction was approved by the State Planning Commission/State Education Commission. The laboratory officially commenced operation and opened to the public in 1992. In 2005, it was renamed as the "National Key Laboratory of Switching Technology," with Academician Chen Junliang as the founder of the laboratory, and Professor Zhang Ping as the current director.
       </p>
       <ul class="list-inline">
         <li>
@@ -58,12 +52,12 @@
     </div>
     <div class="post">
       <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/fb57f689-e1ab-443c-af12-8d4066e202e2.jpg'+avatarPrefix">
-        <span class="username">Spider Man</span>
+        <img class="img-circle" src="/images/tiansuanlogo.png">
+        <span class="username">TianSuan</span>
         <span class="description">Posted 4 photos - 2 days ago</span>
       </div>
       <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="220px">
+        <el-carousel :interval="6000" type="card" height="300px">
           <el-carousel-item v-for="item in carouselImages" :key="item">
             <img :src="item+carouselPrefix" class="image">
           </el-carousel-item>
@@ -88,10 +82,10 @@ export default {
   data() {
     return {
       carouselImages: [
-        'https://wpimg.wallstcn.com/9679ffb0-9e0b-4451-9916-e21992218054.jpg',
-        'https://wpimg.wallstcn.com/bcce3734-0837-4b9f-9261-351ef384f75a.jpg',
-        'https://wpimg.wallstcn.com/d1d7b033-d75e-4cd6-ae39-fcd5f1c0a7c5.jpg',
-        'https://wpimg.wallstcn.com/50530061-851b-4ca5-9dc5-2fead928a939.jpg'
+        '/images/show1.jpg',
+        '/images/show2.jpg',
+        '/images/show3.jpg',
+        '/images/show4.jpg'
       ],
       avatarPrefix,
       carouselPrefix

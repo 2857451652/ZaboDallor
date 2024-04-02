@@ -7,12 +7,23 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import moment from 'moment'
+
+const display_time = moment()
 
 const History = {
-  mem_utilization: [0.0, 30.2, 42.28, 46.63, 56.29, 69.33, 68.83, 67.76],
-  cpu_utilization: [0.0, 15.49, 30.28, 45.63, 51.29, 49.33, 48.83, 47.76],
-  temperature: [20.0, 35.7, 53.1, 60, 61.2, 70.4, 65.3, 64.0],
-  time: ['2:00', '2:05', '2:10', '2:15', '2:20', '2:25', '2:30', '2:35']
+  mem_utilization: [52.28, 30.2, 42.28, 46.63, 56.29, 69.33, 68.83, 67.76],
+  cpu_utilization: [42.33, 15.49, 30.28, 45.63, 51.29, 49.33, 48.83, 47.76],
+  temperature: [40.0, 35.7, 53.1, 60, 61.2, 70.4, 65.3, 64.0],
+  time: [
+    moment().subtract(35, 'seconds').format('HH:mm:ss'), 
+    moment().subtract(30, 'seconds').format('HH:mm:ss'), 
+    moment().subtract(25, 'seconds').format('HH:mm:ss'), 
+    moment().subtract(20, 'seconds').format('HH:mm:ss'),  
+    moment().subtract(15, 'seconds').format('HH:mm:ss'),  
+    moment().subtract(10, 'seconds').format('HH:mm:ss'), 
+    moment().subtract(5, 'seconds').format('HH:mm:ss'), 
+    moment().format('HH:mm:ss')]
 }
 
 const Random = {
@@ -48,7 +59,8 @@ export default {
     autoResize: {
       type: Boolean,
       default: true
-    }
+    },
+    display_time: new Date(),
   },
   data() {
     return {
@@ -69,7 +81,7 @@ export default {
     })
     this.timer = window.setInterval(() => {
       setTimeout(() => { this.setRandom() }, 0)
-    }, 2000)
+    }, 8000)
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -113,11 +125,11 @@ export default {
           padding: [5, 10]
         },
         legend: {
-          data: ['temperature']
+          data: ['温度']
         },
         series: [
           {
-            name: 'temperature',
+            name: '温度',
             smooth: true,
             type: 'line',
             itemStyle: {
@@ -148,7 +160,7 @@ export default {
       History.temperature.push(Random.temperature[random_num % 30])
       History.cpu_utilization.push(Random.cpu_utilization[random_num % 30])
       History.mem_utilization.push(Random.mem_utilization[random_num % 30])
-      History.time.push(String(hour) + ':' + String(minute))
+      History.time.push(moment().format('HH:mm:ss'))
       this.addTime()
       random_num++
       this.setOptions()

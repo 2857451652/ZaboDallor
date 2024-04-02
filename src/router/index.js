@@ -38,7 +38,8 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
+
+var normalRoutes = [
   {
     path: '/redirect',
     component: Layout,
@@ -70,8 +71,38 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
+  
+
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Analyze',
+  //       meta: { title: '卫星状态分析', icon: 'el-icon-data-analysis', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
+  //     }
+  //   ]
+  // },
+]
+
+const adminRoutes = [
   {
-    path: '/',
+    path: '/',  //通配符
     component: Layout,
     redirect: '/sat_orbit',
     children: [
@@ -103,7 +134,19 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', noCache: true }
+        meta: { title: '卫星状态信息', icon: 'dashboard', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/analyze',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/analyze/index'),
+        name: 'Analyze',
+        meta: { title: '卫星状态分析', icon: 'el-icon-data-line', noCache: true }
       }
     ]
   },
@@ -115,7 +158,7 @@ export const constantRoutes = [
         path: 'upload',
         component: () => import('@/views/upload/index'),
         name: 'Upload',
-        meta: { title: 'Upload', icon: 'documentation', noCache: true }
+        meta: { title: '文件传输模块', icon: 'documentation', noCache: true }
       }
     ]
   },
@@ -127,49 +170,63 @@ export const constantRoutes = [
         path: 'appctl',
         component: () => import('@/views/AppController/index'),
         name: 'AppController',
-        meta: { title: 'AppController', icon: 'component', noCache: true }
+        meta: { title: '卫星应用部署', icon: 'component', noCache: true }
       }
     ]
   },
-  // {
-  //   path: '/documentation',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/documentation/index'),
-  //       name: 'Documentation',
-  //       meta: { title: 'Documentation', icon: 'documentation', noCache: true }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/guide',
-  //   component: Layout,
-  //   redirect: '/guide/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/guide/index'),
-  //       name: 'Guide',
-  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'http://www.tiansuan.site', // 外部网址
+        meta: { title: '卫星大数据平台链接', icon: 'el-icon-link', noCache: true }
+      }
+    ]
+  },
   {
     path: '/profile',
     component: Layout,
-    redirect: '/profile/index',
+    redirect: '/profile',
     hidden: true,
     children: [
       {
-        path: 'index',
+        path: 'profile',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
         meta: { title: 'Profile', icon: 'user', noCache: true }
       }
     ]
   }
+]
+
+const visiterRoutes = [
+  {
+    path: '/profile',
+    component: Layout,
+    // hidden: true,
+    children: [
+      {
+        path: 'profile',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: 'Profile', icon: 'user', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: Layout,
+    redirect: '/upload',
+    children: [
+      {
+        path: 'upload',
+        component: () => import('@/views/upload/index'),
+        name: 'upload',
+        meta: { title: 'Upload Files', icon: 'documentation', noCache: true }
+      }
+    ]
+  },
 ]
 
 /**
@@ -435,6 +492,18 @@ export const constantRoutes = [
 //   { path: '*', redirect: '/404', hidden: true }
 // ]
 
+function makeRoutes() {
+  var userRole = sessionStorage.getItem('role');
+  if(userRole=="admin")
+    return normalRoutes.concat(adminRoutes)
+  else if(userRole=="visiter")
+    return normalRoutes.concat(visiterRoutes)
+  else
+    return normalRoutes.concat(adminRoutes)
+}
+
+export var constantRoutes = makeRoutes()
+
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
@@ -442,11 +511,23 @@ const createRouter = () => new Router({
 })
 
 const router = createRouter()
+var added_mark = 0
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
+
+export function dynamicallyAddRoutes() {
+  constantRoutes = makeRoutes()
+  const newRouter = new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  })
+  router.matcher = newRouter.matcher // reset router
+}
+
 
 export default router

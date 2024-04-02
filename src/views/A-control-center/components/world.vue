@@ -48,20 +48,20 @@ export default {
                   "2 55261  97.3598 167.3962 0009698  41.8613  69.7682 15.29378720 12017"],
                 },
       station_loc:[
-        [127.53, 50.22, 0, "黑河站"],
-        [121.39, 37.52, 0, "天算华东站"],
-        [112.59, 28.12, 0, "长沙站"],
-        [109.45, 24.18, 0, "天算华南站"],
-        [98.50, 39.71, 0, "酒泉站"],
-        [86.17, 41.72, 0, "库尔勒站"],
-        [88.31, 43.36, 0, "达坂城站"],
+        [127.53, 50.22, 300, "黑河站"],
+        [121.39, 37.52, 300, "天算华东站"],
+        [112.59, 28.12, 300, "长沙站"],
+        [109.45, 24.18, 300, "天算华南站"],
+        [98.50, 39.71, 300, "酒泉站"],
+        [86.17, 41.72, 300, "库尔勒站"],
+        [88.31, 43.36, 300, "达坂城站"],
       ],
       chosen_sate: "",
       chosen_index:-1,
       chosen_station:-1,
       chosen_coord:[115, 40],
       rotate:this.settings.autoRotate,
-      base_height: 320,
+      base_height: 300,
       timer1:NaN,
       timer2:NaN,
       
@@ -132,7 +132,7 @@ export default {
           },
           light: {
             main: {
-              intensity: 5,
+              intensity: 3,
               shadow: true,
             },
             ambient:{
@@ -314,35 +314,39 @@ export default {
     chooseSate(sate_id){
       this.chosen_sate = sate_id
       this.renewData()
-      this.setSateToCenter()
+      this.setSateToCenter(this.chosen_coord)
     },
     unchooseSate(){
       this.chosen_sate = ""
       this.chosen_index = -1
       this.renewData()
     },
-    chooseSation(id){
-      this.chosen_coord = [this.station_loc[id][0], this.station_loc[id][1]]
+    chooseStation(id){
       this.chosen_station = id
       this.renewData()
-      this.setSateToCenter()
+      this.setSateToCenter([this.station_loc[id][0], this.station_loc[id][1]])
     },
-    unchooseSation(){
+    unchooseStation(){
       this.chosen_station = -1
       this.renewData()
     },
-    setSateToCenter(){
+    setSateToCenter(chosen_coord){
       var option = this.myChart.getOption()
       var set_center = {
         globe:{
           viewControl:{
-            targetCoord: this.chosen_coord,
+            targetCoord: chosen_coord,
           }
         }
       }
       this.myChart.setOption(set_center)
       this.myChart.setOption(option)
       
+    },
+    renewBaseHeight(){
+      for(var i=0; i<this.station_loc.length; i++){
+        this.station_loc[i][2] = this.base_height;
+      }
     },
     updateData() {
       if(this.chosen_sate != "")
@@ -379,13 +383,14 @@ export default {
       {
         var ret = this.sateOption(time, sate_name)
         var sate_place = ret["sate_pos"]
-        
+        if(sate_place[2] <= this.base_height){
+          this.base_height = sate_place[2] - 100
+          this.renewBaseHeight()
+        }
         if(this.chosen_sate == sate_name){
           circle = ret["circle"]
           this.chosen_index = sate_pos.length
           this.chosen_coord = [sate_place[0], sate_place[1]]
-          console.log(sate_place)
-          console.log(circle)
         }
         sate_place.push(sate_name)
         sate_pos.push(sate_place)
@@ -393,6 +398,19 @@ export default {
       }
       this.myChart.setOption({
         series: [
+          ///////////////////////////地面站///////////////////////
+          {
+            type: 'scatter3D',
+            coordinateSystem: 'globe',
+            symbolSize: 6,
+            itemStyle: {
+              color: params => {
+                  return params.dataIndex === this.chosen_station ? 'rgb(178, 34, 34)':'rgb(61,145,64)' // set color based on data index
+                },
+              opacity: 1
+            },
+            data: this.station_loc
+          },
           ///////////////////////////没有被选中的卫星///////////////////////
         {
           type: 'lines3D',
@@ -412,7 +430,7 @@ export default {
             width: 0,
             opacity: 0.6
           },
-          data: tail_track,
+          data: (this.settings.tail)?tail_track:[],
         },// tail track
         {
           type: 'scatter3D',
@@ -430,8 +448,8 @@ export default {
             color: params => {
                 return params.dataIndex === this.chosen_index ? 'rgb(253, 245, 230)' : 'rgb(248,248,255)' // set color based on data index
               },
-            
-            opacity: 1
+            borderWidth: 0.1,
+            opacity: 1,
           },
           data: sate_pos
         },
@@ -445,23 +463,12 @@ export default {
             color: params => {
                 return params.dataIndex === this.chosen_index ? 'rgb(255, 99, 71)' : 'rgb(30, 144, 255)' // set color based on data index
               },
+            borderWidth: 0.1,
             opacity: 1
           },
           data: sate_pos
         }, // 卫星图案
-        ///////////////////////////地面站///////////////////////
-        {
-          type: 'scatter3D',
-          coordinateSystem: 'globe',
-          symbolSize: 6,
-          itemStyle: {
-            color: params => {
-                return params.dataIndex === this.chosen_station ? 'rgb(178, 34, 34)':'rgb(255,227,132)' // set color based on data index
-              },
-            opacity: 1
-          },
-          data: this.station_loc
-        },
+
         ///////////////////////////被选中的卫星///////////////////////
         {
           type: 'lines3D',

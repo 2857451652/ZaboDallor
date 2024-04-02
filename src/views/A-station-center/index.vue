@@ -30,6 +30,15 @@
                 <span style="float: left;">{{station_info[chosen_station].station}}</span>
               </span>
             </el-row>
+            <el-row style="margin-top:15px">
+              <span style="float: left;">
+                <i class="el-icon-user" style="margin-right:5px" />
+                归属类型: 
+              </span>
+              <span style="float: right; width:60%">
+                <span style="float: left;">{{station_info[chosen_station].station}}</span>
+              </span>
+            </el-row>
             <el-row style="margin-top:20px">
               <span style="float: left;font-weight: bold;">
                 <i class="el-icon-map-location"/>
@@ -115,13 +124,13 @@ export default {
       dataArr: [20, 50, 80, 90, 70, 30, 60, 40, 10, 100],
       activeName: '1',
       station_info:[
-        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:8520},
-        {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:8520},
-        {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:8520},
-        {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:8520},
-        {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:8520},
-        {station:"库尔勒站", lon:86.17, lat:41.72, alt:934, antenna:"Cross Yagi (UHF)", success_rate:0.88, observation:8520},
-        {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520},
+        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520, cate:"租赁"},
+        {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:9627, cate:"共建"},
+        {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:3486, cate:"租赁"},
+        {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:14237, cate:"共建"},
+        {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:7546, cate:"租赁"},
+        {station:"库尔勒站", lon:86.17, lat:41.72, alt:934, antenna:"Cross Yagi (UHF)", success_rate:0.88, observation:15352, cate:"租赁"},
+        {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520, cate:"租赁"},      
       ],
       chosen_station: 0,
       chosen_loc: [],
@@ -157,7 +166,8 @@ export default {
 .station-container {
   padding: 32px;
   background-color: rgb(24, 39, 64);
-  min-height: 700px;
+  height: calc(100vh - 84px); /* 设置高度为视口高度的100% */
+  overflow-y: auto; /* 如果内容超过屏幕高度，显示滚动条 */
 }
 .info-div {
   width: 50%;

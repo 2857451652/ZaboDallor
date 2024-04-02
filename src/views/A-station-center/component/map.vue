@@ -57,7 +57,6 @@ export default {
         init(){
             var dom = document.getElementById('my_map')
             this.myChart = echarts.init(dom);
-            this.loc = this.chosen_loc
             this.setStation()
         },
         setStation(){
@@ -80,7 +79,7 @@ export default {
         zoomBack(){
             console.log("back!")
             var options = this.myChart.getOption()
-            options.bmap[0].center = this.loc
+            options.bmap[0].center = this.chosen_loc
             options.bmap[0].zoom = 6
             this.myChart.setOption(options)
         }
