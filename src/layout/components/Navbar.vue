@@ -11,7 +11,7 @@
 
         <error-log class="errLog-container right-menu-item hover-effect" />
 
-        <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <screenfull id="screenfull" class="right-menu-item hover-effect"/>
 
         <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
@@ -25,11 +25,11 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/profile">
-            <el-dropdown-item>信息/Profile</el-dropdown-item>
-          </router-link>
           <router-link to="/">
             <el-dropdown-item>主页/Home</el-dropdown-item>
+          <router-link to="/AboutUs/AboutUs">
+            <el-dropdown-item v-if="is_admin">信息/About Us</el-dropdown-item>
+          </router-link>
           </router-link>
           <a target="_blank" href="https://github.com/2857451652/ZaboDallor">
             <el-dropdown-item>Github</el-dropdown-item>
@@ -61,6 +61,11 @@ export default {
     SizeSelect,
     Search
   },
+  data(){
+    return {
+      is_admin: localStorage.getItem('role')=="admin",
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -75,6 +80,19 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    sendFull(){
+      var element = document.getElementById('main-window');
+      console.log(element)
+      if (element.requestFullscreen) {
+        element.requestFullscreen(); // W3C spec
+      } else if (element.mozRequestFullScreen) { /* Firefox */
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) { /* IE/Edge */
+        element.msRequestFullscreen();
+      }
     }
   }
 }

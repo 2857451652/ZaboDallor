@@ -1,6 +1,7 @@
 <template>
   <el-table :data="tableList" style="width: 100%;padding-top: 15px;">
     <el-table-column label="用户ID/User ID" width="150" prop="uid" />
+    <el-table-column label="请求名称/Apply Name" min-width="50" align="center" prop="pid" />
     <el-table-column label="文件名称/File Name" min-width="50" align="center" prop="doc" />
     <el-table-column label="上传时间/Upload Time" min-width="50" align="center" prop="cad" />
     <el-table-column label="状态/State" width="100" align="center" prop="s" />

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" />
+    <!-- <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="click" /> -->
+    <svg-icon :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'" @click="sendFull" />
   </div>
 </template>
 
@@ -30,6 +31,19 @@ export default {
         return false
       }
       screenfull.toggle()
+    },
+    sendFull(){
+      var element = document.getElementById('app-main');
+      console.log(element)
+      if (element.requestFullscreen) {
+        element.requestFullscreen(); // W3C spec
+      } else if (element.mozRequestFullScreen) { /* Firefox */
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) { /* IE/Edge */
+        element.msRequestFullscreen();
+      }
     },
     change() {
       this.isFullscreen = screenfull.isFullscreen

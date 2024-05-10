@@ -9,7 +9,14 @@
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" autocomplete="on" label-position="left">
         <el-row class="title2">
           <img src="@/assets/images/tiansuanlogo.png" width="50px" style="float: left;margin-left:30px"/>
-          <span style="float:right;margin-right:40px;margin-top:5px">天算星座一体化展示平台</span>
+          <span style="float:right;margin-right:40px;margin-top:5px">
+            <el-row>
+            天算星座一体化网络平台
+            </el-row>
+            <el-row style="font-size:18px">
+              Integrated Platform for TianSuan
+            </el-row>
+          </span>
         </el-row>
         <!-- <h3 class="title">
             <img src="@/assets/images/tiansuanlogo.png" width="50px"/>
@@ -114,12 +121,21 @@
           <el-input
             ref="description"
             v-model="regForm.description"
-            placeholder="University and Your Name please"
+            placeholder="Your Organization and Your Information Please"
             name="description"
             type="text"
             tabindex="1"
             autocomplete="on"
           />
+          <!-- <el-input
+            type="textarea"
+            placeholder="Your Organization and Your Information Please"
+            v-model="regForm.description"
+            maxlength="100"
+            show-word-limit
+            style="width:87%; height:100%;margin-left:3%; margin-top:3%; color:black"
+          >
+          </el-input> -->
         </el-form-item>
 
         <el-button :loading="loading" type="warning" style="width:100%;margin-bottom:20px;" 
@@ -153,14 +169,14 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 2) {
-        callback(new Error('请输入正确用户名'))
+        callback(new Error('请输入正确用户名/Please enter correct Username'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码不能少于六位'))
+        callback(new Error('密码不能少于六位/Password no less than 6 characters'))
       } else {
         callback()
       }
@@ -263,9 +279,9 @@ export default {
       })
     },
     saveSession(){
-      sessionStorage.setItem('user', this.loginForm.username);
-      sessionStorage.setItem('role', this.loginForm.role);
-      sessionStorage.setItem('token', this.loginForm.data);
+      localStorage.setItem('user', this.loginForm.username);
+      localStorage.setItem('role', this.loginForm.role);
+      localStorage.setItem('token', this.loginForm.data);
       console.log(this.loginForm)
     },
     handleLogin() {
@@ -346,7 +362,7 @@ export default {
         console.log(result)
         if(result.code == 0){
           this.$message.success("Successfully send register message. Please wait for confirm.");
-        }else if(result.code != 0){
+        }else{
           this.$message.error(result.message);
           this.loading = false
         }
@@ -522,14 +538,5 @@ $light_gray:#eee;
     user-select: none;
   }
 
-  .thirdparty-button {
-
-  }
-
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
-    }
-  }
 }
 </style>

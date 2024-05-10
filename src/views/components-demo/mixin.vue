@@ -161,7 +161,7 @@ export default {
 .mixin-components-container {
   background-color: #f0f2f5;
   padding: 30px;
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - 50px);
 }
 .component-item{
   min-height: 100px;

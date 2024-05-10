@@ -25,6 +25,7 @@
     "echarts": "4.2.1",
     "echarts-gl": "^1.1.1",
     "element-ui": "2.13.2",
+    "ezuikit-js": "^8.0.3",
     "file-saver": "2.0.1",
     "fuse.js": "3.4.4",
     "js-cookie": "2.2.0",

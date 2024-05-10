@@ -1,12 +1,25 @@
 <template>
   <div class="container">
     <div style="text-align:center;height:100%">
-        <world ref="world" style="height:100%;" :settings="settings" @data="getData"/>
-        <span style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;">
+        <el-button v-if="showBigData" type="primary" plain 
+        style="width: 150px; height: 40px; position:absolute; right:15px; bottom:25px; font-weight: bold;"
+        @click="backToMain"> 
+          <i class="el-icon-back"></i> 返回天算星座
+        </el-button>
+        <iframe src="http://www.tiansuan.site" width="100%" height="100%" 
+        scrolling="auto" v-if="showBigData" ></iframe>
+
+
+        <world ref="world" style="height:100%;" :settings="settings" 
+        @data="getData" @zoom-event="zoomTo"/>
+        <span style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;" v-if="!showBigData">
           <i class="el-icon-s-help" style="margin-right:10px" />天 算 星 座
         </span>
+        <span style="position: absolute; top:2%; left:36%; font-size:35px; color:#ffffff; font-weight: bold;" v-if="showBigData">
+          <i class="el-icon-s-help" style="margin-right:10px" />天 算 大 数 据 平 台
+        </span>
         <transition name="el-fade-in">
-          <div class="left-div" v-if="show_sate">
+          <div class="left-div" v-if="show_sate&&!showBigData">
             <el-card shadow="always" class="sate-card">
               <div slot="header" style="height: 10px;">
                 <span style="font-size:18px; color:#409EFF;font-weight: bold;">
@@ -29,11 +42,11 @@
               </el-row>
               <el-row style="margin-top: 15px;text-align:right;">
                 <span style="float: left;">当地时间: </span>
-                <span style="font-size:5px;">{{data.time}}</span>
+                <span style="font-size:10px;">{{data.time}}</span>
               </el-row>
               <el-row style="margin-top: 15px;text-align:right;">
                 <span style="float: left;">UTC时间: </span>
-                <span style="font-size:5px;">{{data.utc_time}}</span>
+                <span style="font-size:12px;">{{data.utc_time}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
@@ -120,7 +133,7 @@
         </transition>
         
         <div class="right-div">
-          <el-card shadow="always" class="console-card" style="font-family: Helvetica Neue">
+          <el-card shadow="always" class="console-card" style="font-family: Helvetica Neue"  v-if="!showBigData">
             <el-row >
               <span style="float: left;">
                 <i class="el-icon-position"/>
@@ -166,8 +179,18 @@
               </span>
             </el-row>
           </el-card>
+          <el-card shadow="always" class="station-card" style="font-family: Helvetica Neue" v-if="!showBigData">
+            <el-row style="">
+              <el-button type="info" 
+              style="width: 150px; height: 40px;font-weight: bold;"
+              @click="toOrbit" icon="el-icon-link">航天运管系统</el-button>
+              <el-tooltip class="item" effect="dark" content="卫星应用部署" placement="top">
+              <el-button type="info" plain icon="el-icon-menu" @click="toApp" circle></el-button>
+              </el-tooltip>
+            </el-row>
+          </el-card>
           <transition name="el-fade-in">
-            <div v-if="show_station">
+            <div v-if="show_station&&!showBigData">
             <el-card shadow="always" class="station-card" >
               <div slot="header" style="height: 10px;">
                 <span style="font-size:18px; color:#409EFF;font-weight: bold;">
@@ -247,7 +270,7 @@ import World from './components/world'
 
 
 export default {
-  name: 'DashboardAdmin',
+  name: 'sat_orbit',
   components: {
     World,
   },
@@ -279,8 +302,9 @@ export default {
       show_station:false,
       sate_opacity:0.7,
       station_info:[
-        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520, cate:"部署服务器"},
         {station:"天算华东站", lon:121.39, lat:37.52, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.82, observation:9627, cate:"共建"},
+        {station:"北京", lon:116.20, lat:39.54, alt:47.8, antenna:"Cross Yagi (UHF)", success_rate:0.90, observation:2453, cate:"大数据分析"},
+        {station:"黑河站", lon:127.53, lat:50.22, alt:500, antenna:"Cross Yagi (UHF)", success_rate:0.85, observation:18520, cate:"部署服务器"},
         {station:"长沙站", lon:112.59, lat:28.12, alt:58, antenna:"Cross Yagi (UHF)", success_rate:0.79, observation:3486, cate:"部署服务器"},
         {station:"天算华南站", lon:109.45, lat:24.18, alt:150, antenna:"Cross Yagi (UHF)", success_rate:0.76, observation:14237, cate:"共享"},
         {station:"酒泉站", lon:98.50, lat:39.71, alt:1350, antenna:"Cross Yagi (UHF)", success_rate:0.89, observation:7546, cate:"部署服务器"},
@@ -288,10 +312,17 @@ export default {
         {station:"达坂城站", lon:88.31, lat:43.36, alt:1128, antenna:"Cross Yagi (UHF)", success_rate:0.86, observation:8520, cate:"部署服务器"},
       ],
       chosen_station: 0,
-      station_name: "黑河站",
+      station_name: "天算华东站",
+      showBigData:false,
     }
   },
   methods: {
+    toOrbit(){
+      this.$router.push({ name: 'orbit' })
+    },
+    toApp(){
+      this.$router.push({ name: 'appctl' })
+    },
     clickOrbit(){
       this.$refs.world.switchOrbit()
     },
@@ -331,6 +362,29 @@ export default {
       this.chosen_station = parseInt(value)
       this.$refs.world.chooseStation(this.chosen_station)
     },
+    zoomTo(data){
+      this.$refs.world.zoomSpace(data.coord[0], data.coord[1])
+      if(data.name=="北京大数据分析"){
+        this.timer2 = setTimeout(() => {
+          this.showBigData = true
+        }, 300)
+      }
+      else if(data.name=="天算华东站"){
+        this.timer2 = setTimeout(() => {
+          this.$router.push({ name: 'monitor' })
+        }, 300)
+      }
+    },
+    // zoomToBeijing(){
+    //   this.$refs.world.zoomSpace(116.20, 39.54)
+    //   this.timer2 = setTimeout(() => {
+    //     this.showBigData = true
+    //   }, 300)
+    // },
+    backToMain(){
+      this.showBigData = false
+      this.$refs.world.backToNorm()
+    },
     overConsole(){
       console.log("hi")
     },
@@ -345,12 +399,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .container {
   //background-color: rgb(240, 242, 245);
   background-color: rgb(1, 12, 24);
   position: absolute;
   top: 0;
   bottom: 0;
+  position: absolute;
+  height: 100%; /* 设置高度为视口高度的100% */
   width: 100%;
 }
 
@@ -369,20 +426,21 @@ export default {
 .sate-card {
   width: 250px;
   height: auto;
+  margin-top: 20%;
   background:#ffffff;
   opacity: 0.7;
 }
 .station-card {
   width: 250px;
   height: auto;
-  margin-top: 20px;
+  margin-top: 10%;
   background:#ffffff;
   opacity: 0.7;
 }
 .console-card {
   width: 250px;
   height: auto;
-  margin-top: 20px;
+  margin-top: 20%;
   background:#ffffff;
   opacity: 0.7;
 }

@@ -115,6 +115,19 @@ const adminRoutes = [
     ]
   },
   {
+    path: '/orbit',
+    component: Layout,
+    children: [
+      {
+        // path: 'http://www.tiansuan.site', // 外部网址
+        path: 'orbit',
+        component: () => import('@/views/link/orbitIndex'),
+        name: 'orbit',
+        meta: { title: '航天运管系统', icon: 'el-icon-link', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/station',
     component: Layout,
     children: [
@@ -123,6 +136,18 @@ const adminRoutes = [
         component: () => import('@/views/A-station-center/index'),
         name: 'station',
         meta: { title: '地面站信息', icon: 'el-icon-place'}
+      }
+    ]
+  },
+  {
+    path: '/monitor',
+    component: Layout,
+    children: [
+      {
+        path: 'monitor',
+        component: () => import('@/views/monitor/index'),
+        name: 'monitor',
+        meta: { title: '地面站监控', icon: 'el-icon-video-camera-solid'}
       }
     ]
   },
@@ -143,7 +168,7 @@ const adminRoutes = [
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: 'analyze',
         component: () => import('@/views/analyze/index'),
         name: 'Analyze',
         meta: { title: '卫星状态分析', icon: 'el-icon-data-line', noCache: true }
@@ -168,33 +193,48 @@ const adminRoutes = [
     children: [
       {
         path: 'appctl',
-        component: () => import('@/views/AppController/index'),
-        name: 'AppController',
+        component: () => import('@/views/link/tableIndex'),
+        name: 'appctl',
         meta: { title: '卫星应用部署', icon: 'component', noCache: true }
       }
     ]
   },
+  // {
+  //   path: '/appctl',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'appctl',
+  //       component: () => import('@/views/AppController/index'),
+  //       name: 'AppController',
+  //       meta: { title: '卫星应用部署', icon: 'component', noCache: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/bigdata',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       // path: 'http://www.tiansuan.site', // 外部网址
+  //       path: 'bigdata',
+  //       component: () => import('@/views/link/bigdataIndex'),
+  //       name: 'bigdata',
+  //       meta: { title: '卫星大数据平台', icon: 'el-icon-s-data', noCache: true }
+  //     }
+  //   ]
+  // },
   {
-    path: '/external-link',
+    path: '/AboutUs',
     component: Layout,
-    children: [
-      {
-        path: 'http://www.tiansuan.site', // 外部网址
-        meta: { title: '卫星大数据平台链接', icon: 'el-icon-link', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile',
+    redirect: '/AboutUs',
     hidden: true,
     children: [
       {
-        path: 'profile',
+        path: 'AboutUs',
         component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: 'AboutUs',
+        meta: { title: 'AboutUs', icon: 'user', noCache: true }
       }
     ]
   }
@@ -202,15 +242,15 @@ const adminRoutes = [
 
 const visiterRoutes = [
   {
-    path: '/profile',
+    path: '/AboutUs',
     component: Layout,
-    // hidden: true,
+    hidden: true,
     children: [
       {
-        path: 'profile',
+        path: 'AboutUs',
         component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: 'AboutUs',
+        meta: { title: 'AboutUs', icon: 'user', noCache: true }
       }
     ]
   },
@@ -493,7 +533,7 @@ const visiterRoutes = [
 // ]
 
 function makeRoutes() {
-  var userRole = sessionStorage.getItem('role');
+  var userRole = localStorage.getItem('role');
   if(userRole=="admin")
     return normalRoutes.concat(adminRoutes)
   else if(userRole=="visiter")

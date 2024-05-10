@@ -36,7 +36,7 @@ import Timeline from './components/Timeline'
 import Account from './components/Account'
 
 export default {
-  name: 'Profile',
+  name: 'AboutUs',
   components: { UserCard, Activity, Timeline, Account },
   data() {
     return {
@@ -57,8 +57,8 @@ export default {
   methods: {
     getUser() {
       this.user = {
-        name: sessionStorage.getItem('user'),
-        role: sessionStorage.getItem('role'),
+        name: localStorage.getItem('user'),
+        role: localStorage.getItem('role'),
         email: 'sgwang@bupt.edu.cn',
         avatar: require("@/assets/images/tiansuanlogo.png")
       }

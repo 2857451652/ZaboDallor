@@ -182,8 +182,9 @@ export default {
 .dashboard-editor-container {
   padding: 32px;
   background-color: rgb(24, 39, 64); 
-  position: relative;  
-  height: calc(100vh - 84px); /* 设置高度为视口高度的100% */
+  position: absolute;
+  height: 100%; /* 设置高度为视口高度的100% */
+  width: 100%;
   overflow-y: auto; /* 如果内容超过屏幕高度，显示滚动条 */
 
   .github-corner {

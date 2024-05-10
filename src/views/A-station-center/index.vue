@@ -31,7 +31,7 @@
               </span>
             </el-row>
             <el-row style="margin-top:15px">
-              <span style="float: left;">
+              <span style="float: left;font-weight: bold;">
                 <i class="el-icon-user" style="margin-right:5px" />
                 归属类型: 
               </span>
@@ -105,6 +105,10 @@
       </el-tabs>
     </el-card>
 
+    <el-button type="primary" plain icon="el-icon-back"
+      style="width: 150px; height: 40px; position:absolute; right:15px; bottom:25px; font-weight: bold;"
+      @click="backToMain">返回天算星座</el-button>
+
   </div>
 
 </template>
@@ -144,6 +148,9 @@ export default {
     this.switchStation(this.chosen_station)
   },
   methods: {
+    backToMain(){
+      this.$router.push({ name: 'sat_orbit' })
+    },
       handleClick(){
         
       },
@@ -166,7 +173,9 @@ export default {
 .station-container {
   padding: 32px;
   background-color: rgb(24, 39, 64);
-  height: calc(100vh - 84px); /* 设置高度为视口高度的100% */
+  position: absolute;
+  height: 100%; /* 设置高度为视口高度的100% */
+  width: 100%; /* 设置高度为视口高度的100% */
   overflow-y: auto; /* 如果内容超过屏幕高度，显示滚动条 */
 }
 .info-div {

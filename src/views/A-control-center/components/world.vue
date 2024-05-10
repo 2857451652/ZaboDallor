@@ -48,8 +48,9 @@ export default {
                   "2 55261  97.3598 167.3962 0009698  41.8613  69.7682 15.29378720 12017"],
                 },
       station_loc:[
-        [127.53, 50.22, 300, "黑河站"],
         [121.39, 37.52, 300, "天算华东站"],
+        [116.20, 39.54, 300, "北京大数据分析"],
+        [127.53, 50.22, 300, "黑河站"],
         [112.59, 28.12, 300, "长沙站"],
         [109.45, 24.18, 300, "天算华南站"],
         [98.50, 39.71, 300, "酒泉站"],
@@ -75,16 +76,24 @@ export default {
       },
     }
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next();
+  // },
   mounted() {
     this.init();
+    window.addEventListener('resize', this.handleResize);
   },
   destroyed() {
     clearInterval(this.timer1)
     clearInterval(this.timer2)
+    window.removeEventListener('resize', this.handleResize);
     echarts.dispose(this.myChart)
     console.log("cleared")
   },
   methods: {
+    handleResize(){
+      this.myChart.resize();
+    },
     init() {
       console.log("comming")
       this.myChart = echarts.init(this.$refs.refChart)
@@ -169,6 +178,20 @@ export default {
       this.myChart.setOption(option)
       this.renewData()
       this.setSateToCenter()
+      let that = this
+      this.myChart.on('click', function (params) {
+        if(params.data[3]=="北京大数据分析"){
+          // that.zoomSpace(params.data[0], params.data[1])
+          that.$emit('zoom-event', {name:"北京大数据分析",coord:[params.data[0], params.data[1]]});
+        }
+        else if(params.data[3]=="天算华东站"){
+          // that.zoomSpace(params.data[0], params.data[1])
+          that.$emit('zoom-event', {name:"天算华东站",coord:[params.data[0], params.data[1]]});
+        }
+        else{
+          that.setSateToCenter([params.data[0], params.data[1]])
+        }
+      });
       this.timer1 = setInterval(() => {
         this.renewData()
       }, 15000)
@@ -326,6 +349,33 @@ export default {
       this.renewData()
       this.setSateToCenter([this.station_loc[id][0], this.station_loc[id][1]])
     },
+    zoomSpace(lon, lat){
+      var option = this.myChart.getOption()
+      var set_center = {
+        globe:{
+          viewControl:{
+            targetCoord: [lon, lat],
+            distance: 10,
+            autoRotate:false,
+          }
+        }
+      }
+      this.myChart.setOption(set_center)
+      this.myChart.setOption(option)
+    },
+    backToNorm(){
+      var option = this.myChart.getOption()
+      var set_center = {
+        globe:{
+          viewControl:{
+            distance: 240,
+            autoRotate:true,
+          }
+        }
+      }
+      this.myChart.setOption(set_center)
+      this.myChart.setOption(option)
+    },
     unchooseStation(){
       this.chosen_station = -1
       this.renewData()
@@ -402,7 +452,7 @@ export default {
           {
             type: 'scatter3D',
             coordinateSystem: 'globe',
-            symbolSize: 6,
+            symbolSize: 10,
             itemStyle: {
               color: params => {
                   return params.dataIndex === this.chosen_station ? 'rgb(178, 34, 34)':'rgb(61,145,64)' // set color based on data index
