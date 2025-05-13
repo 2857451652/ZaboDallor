@@ -32,11 +32,35 @@
                 <span style="float: right;">
                   <el-select v-model="settings.sate_id" placeholder="Choose your Satellite" 
                   style="width: 120px;" @change="showSate">
+                  <el-option label="天仪33卫星" value="天仪33卫星"></el-option>
+                  <el-option label="丽泽一号" value="丽泽一号"></el-option>
                   <el-option label="宝酝号" value="宝酝号"></el-option>
                   <el-option label="创星雷神号" value="创星雷神号"></el-option>
-                  <el-option label="丽泽一号" value="丽泽一号"></el-option>
                   <el-option label="元光号" value="元光号"></el-option>
                   <el-option label="北邮一号" value="北邮一号"></el-option>
+                  <el-option label="天算9号" value="天算9号"></el-option>
+                  <el-option label="天算10号" value="天算10号"></el-option>
+                  <el-option label="天算11号" value="天算11号"></el-option>
+                  <el-option label="天算12号" value="天算12号"></el-option>
+                  <el-option label="天算13号" value="天算13号"></el-option>
+                  <el-option label="天算14号" value="天算14号"></el-option>
+                  <el-option label="天算15号" value="天算15号"></el-option>
+                  <el-option label="天算16号" value="天算16号"></el-option>
+                  <el-option label="天算17号" value="天算17号"></el-option>
+                  <el-option label="天算18号" value="天算18号"></el-option>
+                  <el-option label="天算19号" value="天算19号"></el-option>
+                  <el-option label="天算20号" value="天算20号"></el-option>
+                  <el-option label="天算21号" value="天算21号"></el-option>
+                  <el-option label="天算22号" value="天算22号"></el-option>
+                  <el-option label="天算23号" value="天算23号"></el-option>
+                  <el-option label="天算24号" value="天算24号"></el-option>
+                  <el-option label="天算25号" value="天算25号"></el-option>
+                  <el-option label="天算26号" value="天算26号"></el-option>
+                  <el-option label="天算27号" value="天算27号"></el-option>
+                  <el-option label="天算28号" value="天算28号"></el-option>
+                  <el-option label="天算29号" value="天算29号"></el-option>
+                  <el-option label="天算30号" value="天算30号"></el-option>
+                  <el-option label="天算31号" value="天算31号"></el-option>
                 </el-select>
               </span>
               </el-row>
@@ -257,16 +281,7 @@
 </template>
 
 <script>
-//import PanelGroup from './components/PanelGroup'
-//import LineChart from './components/LineChart'
-// import RaddarChart from './components/RaddarChart'
-// import PieChart from './components/PieChart'
-// import BarChart from './components/BarChart'
-// import TransactionTable from './components/TransactionTable'
-// import TodoList from './components/TodoList'
-//import BoxCard from './components/BoxCard'
 import World from './components/world'
-//import Coord from './components/Coord'
 
 
 export default {
@@ -289,7 +304,14 @@ export default {
         time_after: new Date(Date.now()+60*60*1000),
         cover_angle:25,
       },
-
+      orbit_show_list: { 
+                "天仪33卫星":false,"丽泽一号":false,"宝酝号":false,"创星雷神号":false,"元光号":false,
+                "北邮一号":false,"天算9号":false,"天算10号":false,"天算11号":false,"天算12号":false,
+                "天算13号":false,"天算14号":false,"天算15号":false,"天算16号":false,"天算17号":false,
+                "天算18号":false,"天算19号":false,"天算20号":false,"天算21号":false,"天算22号":false,
+                "天算23号":false,"天算24号":false,"天算25号":false,"天算26号":false,"天算27号":false,
+                "天算28号":false,"天算29号":false,"天算30号":false,"天算31号":false,
+                },
       data:{
         time:100,
         utc_time:100,
@@ -324,7 +346,10 @@ export default {
       this.$router.push({ name: 'appctl' })
     },
     clickOrbit(){
-      this.$refs.world.switchOrbit()
+      // this.$refs.world.switchOrbit()
+      this.orbit_show_list[this.settings.sate_id] = this.settings.show_orbit
+      this.$refs.world.chooseOrbit(this.settings.show_orbit, this.settings.sate_id)
+      console.log("clicked orbit", this.settings.show_orbit, this.settings.sate_id)
     },
     clickCover(){
       this.$refs.world.renewData()
@@ -341,15 +366,14 @@ export default {
     showSate(){
       if(this.show_sate)
       {
+        this.settings.show_orbit = this.orbit_show_list[this.settings.sate_id]
         this.$refs.world.chooseSate(this.settings.sate_id)
-        this.$refs.world.switchOrbit()
+        this.$refs.world.chooseOrbit(this.settings.show_orbit, this.settings.sate_id)
       }
       else
       {
-        this.settings.show_orbit = false
         this.settings.show_coverage = false
         this.$refs.world.unchooseSate()
-        this.$refs.world.switchOrbit()
       }
     },
     showStation(){

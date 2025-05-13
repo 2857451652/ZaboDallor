@@ -193,7 +193,8 @@ const adminRoutes = [
     children: [
       {
         path: 'appctl',
-        component: () => import('@/views/link/tableIndex'),
+        // component: () => import('@/views/link/tableIndex'),
+        component: () => import('@/views/AppController/index.vue'),
         name: 'appctl',
         meta: { title: '卫星应用部署', icon: 'component', noCache: true }
       }
