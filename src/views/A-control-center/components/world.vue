@@ -482,7 +482,6 @@ export default {
         }
         this.orbit_data[selected_sate]["show"] = true
         this.orbit_data[selected_sate]["orbit"] = [orbitData]
-        console.log("set orbit data", this.orbit_data[selected_sate])
         this.renewData()
       }
       else{
@@ -707,8 +706,6 @@ export default {
         }, // 覆盖范围的圈圈
         
       ]
-      
-      console.log(show_series)
       
       this.myChart.setOption({
         series: show_series
