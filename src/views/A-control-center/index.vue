@@ -1,282 +1,513 @@
 <template>
   <div class="container">
     <div style="text-align:center;height:100%">
-        <el-button v-if="showBigData" type="primary" plain 
+      <el-button
+        v-if="showBigData"
+        type="primary"
+        plain
         style="width: 150px; height: 40px; position:absolute; right:15px; bottom:25px; font-weight: bold;"
-        @click="backToMain"> 
-          <i class="el-icon-back"></i> 返回天算星座
-        </el-button>
-        <iframe src="http://www.tiansuan.site" width="100%" height="100%" 
-        scrolling="auto" v-if="showBigData" ></iframe>
+        @click="backToMain"
+      >
+        <i class="el-icon-back" /> 返回天算星座
+      </el-button>
+      <iframe
+        v-if="showBigData"
+        src="http://www.tiansuan.site"
+        width="100%"
+        height="100%"
+        scrolling="auto"
+      />
 
 
-        <world ref="world" style="height:100%;" :settings="settings" 
-        @data="getData" @zoom-event="zoomTo"/>
-        <span style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;" v-if="!showBigData">
-          <i class="el-icon-s-help" style="margin-right:10px" />天 算 星 座
-        </span>
-        <span style="position: absolute; top:2%; left:36%; font-size:35px; color:#ffffff; font-weight: bold;" v-if="showBigData">
-          <i class="el-icon-s-help" style="margin-right:10px" />天 算 大 数 据 平 台
-        </span>
-        <transition name="el-fade-in">
-          <div class="left-div" v-if="show_sate&&!showBigData">
-            <el-card shadow="always" class="sate-card">
-              <div slot="header" style="height: 10px;">
-                <span style="font-size:18px; color:#409EFF;font-weight: bold;">
-                  <i class="el-icon-position"/>
-                  卫星状态
-                </span>
-              </div>
-              <el-row>
-                <span style="float: left; margin-top:8px">卫星名称: </span>
-                <span style="float: right;">
-                  <el-select v-model="settings.sate_id" placeholder="Choose your Satellite" 
-                  style="width: 120px;" @change="showSate">
-                  <el-option label="天仪33卫星" value="天仪33卫星"></el-option>
-                  <el-option label="丽泽一号" value="丽泽一号"></el-option>
-                  <el-option label="宝酝号" value="宝酝号"></el-option>
-                  <el-option label="创星雷神号" value="创星雷神号"></el-option>
-                  <el-option label="元光号" value="元光号"></el-option>
-                  <el-option label="北邮一号" value="北邮一号"></el-option>
-                  <el-option label="天算9号" value="天算9号"></el-option>
-                  <el-option label="天算10号" value="天算10号"></el-option>
-                  <el-option label="天算11号" value="天算11号"></el-option>
-                  <el-option label="天算12号" value="天算12号"></el-option>
-                  <el-option label="天算13号" value="天算13号"></el-option>
-                  <el-option label="天算14号" value="天算14号"></el-option>
-                  <el-option label="天算15号" value="天算15号"></el-option>
-                  <el-option label="天算16号" value="天算16号"></el-option>
-                  <el-option label="天算17号" value="天算17号"></el-option>
-                  <el-option label="天算18号" value="天算18号"></el-option>
-                  <el-option label="天算19号" value="天算19号"></el-option>
-                  <el-option label="天算20号" value="天算20号"></el-option>
-                  <el-option label="天算21号" value="天算21号"></el-option>
-                  <el-option label="天算22号" value="天算22号"></el-option>
-                  <el-option label="天算23号" value="天算23号"></el-option>
-                  <el-option label="天算24号" value="天算24号"></el-option>
-                  <el-option label="天算25号" value="天算25号"></el-option>
-                  <el-option label="天算26号" value="天算26号"></el-option>
-                  <el-option label="天算27号" value="天算27号"></el-option>
-                  <el-option label="天算28号" value="天算28号"></el-option>
-                  <el-option label="天算29号" value="天算29号"></el-option>
-                  <el-option label="天算30号" value="天算30号"></el-option>
-                  <el-option label="天算31号" value="天算31号"></el-option>
+      <world
+        ref="world"
+        style="height:100%;"
+        :settings="settings"
+        @data="getData"
+        @zoom-event="zoomTo"
+      />
+      <span
+        v-if="!showBigData"
+        style="position: absolute; top:2%; left:42%; font-size:35px; color:#ffffff; font-weight: bold;"
+      >
+        <i
+          class="el-icon-s-help"
+          style="margin-right:10px"
+        />天 算 星 座
+      </span>
+      <span
+        v-if="showBigData"
+        style="position: absolute; top:2%; left:36%; font-size:35px; color:#ffffff; font-weight: bold;"
+      >
+        <i
+          class="el-icon-s-help"
+          style="margin-right:10px"
+        />天 算 大 数 据 平 台
+      </span>
+      <transition name="el-fade-in">
+        <div
+          v-if="show_sate&&!showBigData"
+          class="left-div"
+        >
+          <el-card
+            shadow="always"
+            class="sate-card"
+          >
+            <div
+              slot="header"
+              style="height: 10px;"
+            >
+              <span style="font-size:18px; color:#409EFF;font-weight: bold;">
+                <i class="el-icon-position" />
+                卫星状态
+              </span>
+            </div>
+            <el-row>
+              <span style="float: left; margin-top:8px">卫星名称: </span>
+              <span style="float: right;">
+                <el-select
+                  v-model="settings.sate_id"
+                  placeholder="Choose your Satellite"
+                  style="width: 120px;"
+                  @change="showSate"
+                >
+                  <el-option
+                    label="天仪33卫星"
+                    value="天仪33卫星"
+                  />
+                  <el-option
+                    label="丽泽一号"
+                    value="丽泽一号"
+                  />
+                  <el-option
+                    label="宝酝号"
+                    value="宝酝号"
+                  />
+                  <el-option
+                    label="创星雷神号"
+                    value="创星雷神号"
+                  />
+                  <el-option
+                    label="元光号"
+                    value="元光号"
+                  />
+                  <el-option
+                    label="北邮一号"
+                    value="北邮一号"
+                  />
+                  <el-option
+                    label="北邮二号"
+                    value="北邮二号"
+                  />
+                  <el-option
+                    label="北邮三号"
+                    value="北邮三号"
+                  />
+                  <el-option
+                    label="天算9号"
+                    value="天算9号"
+                  />
+                  <el-option
+                    label="天算10号"
+                    value="天算10号"
+                  />
+                  <el-option
+                    label="天算11号"
+                    value="天算11号"
+                  />
+                  <el-option
+                    label="天算12号"
+                    value="天算12号"
+                  />
+                  <el-option
+                    label="天算13号"
+                    value="天算13号"
+                  />
+                  <el-option
+                    label="天算14号"
+                    value="天算14号"
+                  />
+                  <el-option
+                    label="天算15号"
+                    value="天算15号"
+                  />
+                  <el-option
+                    label="天算16号"
+                    value="天算16号"
+                  />
+                  <el-option
+                    label="天算17号"
+                    value="天算17号"
+                  />
+                  <el-option
+                    label="天算18号"
+                    value="天算18号"
+                  />
+                  <el-option
+                    label="天算19号"
+                    value="天算19号"
+                  />
+                  <el-option
+                    label="天算20号"
+                    value="天算20号"
+                  />
+                  <el-option
+                    label="天算21号"
+                    value="天算21号"
+                  />
+                  <el-option
+                    label="天算22号"
+                    value="天算22号"
+                  />
+                  <el-option
+                    label="天算23号"
+                    value="天算23号"
+                  />
+                  <el-option
+                    label="天算24号"
+                    value="天算24号"
+                  />
+                  <el-option
+                    label="天算25号"
+                    value="天算25号"
+                  />
+                  <el-option
+                    label="天算26号"
+                    value="天算26号"
+                  />
+                  <el-option
+                    label="天算27号"
+                    value="天算27号"
+                  />
+                  <el-option
+                    label="天算28号"
+                    value="天算28号"
+                  />
+                  <el-option
+                    label="天算29号"
+                    value="天算29号"
+                  />
                 </el-select>
               </span>
-              </el-row>
-              <el-row style="margin-top: 15px;text-align:right;">
-                <span style="float: left;">当地时间: </span>
-                <span style="font-size:10px;">{{data.time}}</span>
-              </el-row>
-              <el-row style="margin-top: 15px;text-align:right;">
-                <span style="float: left;">UTC时间: </span>
-                <span style="font-size:12px;">{{data.utc_time}}</span>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-map-location" style="margin-right:5px" />纬   度: </span>
-                <span style="float: right;">{{data.latitude}}</span>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-map-location" style="margin-right:5px" />经   度：</span>
-                <span style="float: right;">{{data.longitude}}</span>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-d-caret" style="margin-right:5px" />高   度：</span>
-                <span style="float: right;">{{data.altitude}} KM</span>
-              </el-row>
-            </el-card>
-            <el-card shadow="always" class="station-card">
-              <el-row>
-                <span style="float: left; margin-top:8px">观测角(°)：</span>
-                <el-input-number v-model="settings.cover_angle" :min="1" :max="50" style="width: 120px;" @change="clickCover">
-                </el-input-number>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-pie-chart"/>
-                  显示覆盖范围：</span>
-                <span style="float: right;">
-                  <el-switch
-                    v-model="settings.show_coverage" @change="clickCover">
-                  </el-switch>
-                </span>
-              </el-row>
-              
-              <el-divider></el-divider>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-alarm-clock"/>
-                  设置轨迹始末时间：
-                </span>
-              </el-row>
-              <el-row style="margin-top: 10px;">
-                <div style="float: right;">
-                  <span>始：</span>
-                  <el-tooltip class="item" effect="dark" content="Time period before now" placement="right">
-                    <el-time-picker
-                      v-model="settings.time_before"
-                      placeholder="time period before now"
-                      style="width: 160px;" @change="clickOrbit">
-                    </el-time-picker>
-                  </el-tooltip>
-                </div>
-              </el-row>
-              <el-row style="margin-top: 5px;">
-                <div style="float: right;">
-                  <span>末：</span>
-                  <el-tooltip class="item" effect="dark" content="Time period after now" placement="right">
-                    <el-time-picker
-                      arrow-control
-                      v-model="settings.time_after"
-                      placeholder="time period after now"
-                      style="width: 160px;" @change="clickOrbit">
-                    </el-time-picker>
-                  </el-tooltip>
-                </div>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-video-camera"/>
-                  显示卫星轨迹：
-                </span>
-                <span style="float: right;">
-                  <el-switch
-                    v-model="settings.show_orbit" @change="clickOrbit">
-                  </el-switch>
-                </span>
-              </el-row>
-              
-              <!-- <el-row style="margin-top: 15px;">
+            </el-row>
+            <el-row style="margin-top: 15px;text-align:right;">
+              <span style="float: left;">当地时间: </span>
+              <span style="font-size:10px;">{{ data.time }}</span>
+            </el-row>
+            <el-row style="margin-top: 15px;text-align:right;">
+              <span style="float: left;">UTC时间: </span>
+              <span style="font-size:12px;">{{ data.utc_time }}</span>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i
+                  class="el-icon-map-location"
+                  style="margin-right:5px"
+                />纬   度: </span>
+              <span style="float: right;">{{ data.latitude }}</span>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i
+                  class="el-icon-map-location"
+                  style="margin-right:5px"
+                />经   度：</span>
+              <span style="float: right;">{{ data.longitude }}</span>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i
+                  class="el-icon-d-caret"
+                  style="margin-right:5px"
+                />高   度：</span>
+              <span style="float: right;">{{ data.altitude }} KM</span>
+            </el-row>
+          </el-card>
+          <el-card
+            shadow="always"
+            class="station-card"
+          >
+            <el-row>
+              <span style="float: left; margin-top:8px">观测角(°)：</span>
+              <el-input-number
+                v-model="settings.cover_angle"
+                :min="1"
+                :max="50"
+                style="width: 120px;"
+                @change="clickCover"
+              />
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i class="el-icon-pie-chart" />
+                显示覆盖范围：</span>
+              <span style="float: right;">
+                <el-switch
+                  v-model="settings.show_coverage"
+                  @change="clickCover"
+                />
+              </span>
+            </el-row>
+
+            <el-divider />
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i class="el-icon-alarm-clock" />
+                设置轨迹始末时间：
+              </span>
+            </el-row>
+            <el-row style="margin-top: 10px;">
+              <div style="float: right;">
+                <span>始：</span>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="Time period before now"
+                  placement="right"
+                >
+                  <el-time-picker
+                    v-model="settings.time_before"
+                    placeholder="time period before now"
+                    style="width: 160px;"
+                    @change="clickOrbit"
+                  />
+                </el-tooltip>
+              </div>
+            </el-row>
+            <el-row style="margin-top: 5px;">
+              <div style="float: right;">
+                <span>末：</span>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="Time period after now"
+                  placement="right"
+                >
+                  <el-time-picker
+                    v-model="settings.time_after"
+                    arrow-control
+                    placeholder="time period after now"
+                    style="width: 160px;"
+                    @change="clickOrbit"
+                  />
+                </el-tooltip>
+              </div>
+            </el-row>
+            <el-row style="margin-top: 15px;">
+              <span style="float: left;">
+                <i class="el-icon-video-camera" />
+                显示卫星轨迹：
+              </span>
+              <span style="float: right;">
+                <el-switch
+                  v-model="settings.show_orbit"
+                  @change="clickOrbit"
+                />
+              </span>
+            </el-row>
+
+            <!-- <el-row style="margin-top: 15px;">
                 <el-button type="primary" plain style="width: 200px;">CHANGE SETTINGS</el-button>
               </el-row> -->
-            </el-card>
-          </div>
-        </transition>
-        
-        <div class="right-div">
-          <el-card shadow="always" class="console-card" style="font-family: Helvetica Neue"  v-if="!showBigData">
-            <el-row >
-              <span style="float: left;">
-                <i class="el-icon-position"/>
-                显示卫星信息：
-              </span>
-              <span style="float: right;">
-                <el-switch
-                  v-model="show_sate" @change="showSate">
-                </el-switch>
-              </span>
-            </el-row>
-            <el-row style="margin-top: 15px;">
-              <span style="float: left;">
-                <i class="el-icon-place"/>
-                显示地面站信息：
-              </span>
-              <span style="float: right;">
-                <el-switch
-                  v-model="show_station" @change="showStation">
-                </el-switch>
-              </span>
-            </el-row>
-            <el-row style="margin-top: 15px;">
-              <span style="float: left;">
-                <i class="el-icon-finished"/>
-                显示运行尾迹：
-              </span>
-              <span style="float: right;">
-                <el-switch
-                  v-model="settings.tail" @change="clickCover">
-                </el-switch>
-              </span>
-            </el-row>
-            <el-row style="margin-top: 15px;">
-              <span style="float: left;">
-                <i class="el-icon-refresh-right"/>
-                自动旋转：
-              </span>
-              <span style="float: right;">
-                <el-switch
-                  v-model="settings.auto_rotate" @change="clickRotate">
-                </el-switch>
-              </span>
-            </el-row>
           </el-card>
-          <el-card shadow="always" class="station-card" style="font-family: Helvetica Neue" v-if="!showBigData">
-            <el-row style="">
-              <el-button type="info" 
+        </div>
+      </transition>
+
+      <div class="right-div">
+        <el-card
+          v-if="!showBigData"
+          shadow="always"
+          class="console-card"
+          style="font-family: Helvetica Neue"
+        >
+          <el-row>
+            <span style="float: left;">
+              <i class="el-icon-position" />
+              显示卫星信息：
+            </span>
+            <span style="float: right;">
+              <el-switch
+                v-model="show_sate"
+                @change="showSate"
+              />
+            </span>
+          </el-row>
+          <el-row style="margin-top: 15px;">
+            <span style="float: left;">
+              <i class="el-icon-place" />
+              显示地面站信息：
+            </span>
+            <span style="float: right;">
+              <el-switch
+                v-model="show_station"
+                @change="showStation"
+              />
+            </span>
+          </el-row>
+          <el-row style="margin-top: 15px;">
+            <span style="float: left;">
+              <i class="el-icon-finished" />
+              显示运行尾迹：
+            </span>
+            <span style="float: right;">
+              <el-switch
+                v-model="settings.tail"
+                @change="clickCover"
+              />
+            </span>
+          </el-row>
+          <el-row style="margin-top: 15px;">
+            <span style="float: left;">
+              <i class="el-icon-refresh-right" />
+              自动旋转：
+            </span>
+            <span style="float: right;">
+              <el-switch
+                v-model="settings.auto_rotate"
+                @change="clickRotate"
+              />
+            </span>
+          </el-row>
+        </el-card>
+        <el-card
+          v-if="!showBigData"
+          shadow="always"
+          class="station-card"
+          style="font-family: Helvetica Neue"
+        >
+          <el-row style="">
+            <el-button
+              type="info"
               style="width: 150px; height: 40px;font-weight: bold;"
-              @click="toOrbit" icon="el-icon-link">航天运管系统</el-button>
-              <el-tooltip class="item" effect="dark" content="卫星应用部署" placement="top">
-              <el-button type="info" plain icon="el-icon-menu" @click="toApp" circle></el-button>
-              </el-tooltip>
-            </el-row>
-          </el-card>
-          <transition name="el-fade-in">
-            <div v-if="show_station&&!showBigData">
-            <el-card shadow="always" class="station-card" >
-              <div slot="header" style="height: 10px;">
+              icon="el-icon-link"
+              @click="toOrbit"
+            >
+              航天运管系统
+            </el-button>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="卫星应用部署"
+              placement="top"
+            >
+              <el-button
+                type="info"
+                plain
+                icon="el-icon-menu"
+                circle
+                @click="toApp"
+              />
+            </el-tooltip>
+          </el-row>
+        </el-card>
+        <transition name="el-fade-in">
+          <div v-if="show_station&&!showBigData">
+            <el-card
+              shadow="always"
+              class="station-card"
+            >
+              <div
+                slot="header"
+                style="height: 10px;"
+              >
                 <span style="font-size:18px; color:#409EFF;font-weight: bold;">
-                  <i class="el-icon-place"/>
+                  <i class="el-icon-place" />
                   地面站信息
                 </span>
               </div>
               <el-row>
                 <span style="float: left; margin-top:8px">地面站名称: </span>
                 <span style="float: right;">
-                  <el-select placeholder="选择地面站" 
-                  style="width: 120px;" v-model="station_name" @change="changeStation">
-                  <el-option :label="station_info[0].station" value="0"></el-option>
-                  <el-option :label="station_info[1].station" value="1"></el-option>
-                  <el-option :label="station_info[2].station" value="2"></el-option>
-                  <el-option :label="station_info[3].station" value="3"></el-option>
-                  <el-option :label="station_info[4].station" value="4"></el-option>
-                  <el-option :label="station_info[5].station" value="5"></el-option>
-                  <el-option :label="station_info[6].station" value="6"></el-option>
-                </el-select>
-              </span>
-              </el-row>
-              <el-row style="margin-top: 15px;">
-                <span style="float: left;">
-                  <i class="el-icon-user" style="margin-right:5px" />
-                  使用方式: 
+                  <el-select
+                    v-model="station_name"
+                    placeholder="选择地面站"
+                    style="width: 120px;"
+                    @change="changeStation"
+                  >
+                    <el-option
+                      :label="station_info[0].station"
+                      value="0"
+                    />
+                    <el-option
+                      :label="station_info[1].station"
+                      value="1"
+                    />
+                    <el-option
+                      :label="station_info[2].station"
+                      value="2"
+                    />
+                    <el-option
+                      :label="station_info[3].station"
+                      value="3"
+                    />
+                    <el-option
+                      :label="station_info[4].station"
+                      value="4"
+                    />
+                    <el-option
+                      :label="station_info[5].station"
+                      value="5"
+                    />
+                    <el-option
+                      :label="station_info[6].station"
+                      value="6"
+                    />
+                  </el-select>
                 </span>
-                <span style="float: right;">{{station_info[chosen_station].cate}}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
-                  <i class="el-icon-map-location" style="margin-right:5px" />
-                  纬 度: 
+                  <i
+                    class="el-icon-user"
+                    style="margin-right:5px"
+                  />
+                  使用方式:
                 </span>
-                <span style="float: right;">{{station_info[chosen_station].lat}}</span>
+                <span style="float: right;">{{ station_info[chosen_station].cate }}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
-                  <i class="el-icon-map-location" style="margin-right:5px" />
+                  <i
+                    class="el-icon-map-location"
+                    style="margin-right:5px"
+                  />
+                  纬 度:
+                </span>
+                <span style="float: right;">{{ station_info[chosen_station].lat }}</span>
+              </el-row>
+              <el-row style="margin-top: 15px;">
+                <span style="float: left;">
+                  <i
+                    class="el-icon-map-location"
+                    style="margin-right:5px"
+                  />
                   经 度：
                 </span>
-                <span style="float: right;">{{station_info[chosen_station].lon}}</span>
+                <span style="float: right;">{{ station_info[chosen_station].lon }}</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: left;">
-                  <i class="el-icon-d-caret" style="margin-right:5px" />
+                  <i
+                    class="el-icon-d-caret"
+                    style="margin-right:5px"
+                  />
                   海 拔：
                 </span>
-                <span style="float: right;">{{station_info[chosen_station].alt}}m</span>
+                <span style="float: right;">{{ station_info[chosen_station].alt }}m</span>
               </el-row>
               <el-row style="margin-top: 15px;">
                 <span style="float: right;">
-                  <el-button type="text" @click="jumpToDetails">详细信息</el-button>
+                  <el-button
+                    type="text"
+                    @click="jumpToDetails"
+                  >详细信息</el-button>
                 </span>
               </el-row>
             </el-card>
-            </div>
-            
-          </transition>
-          
-        </div>
+          </div>
+        </transition>
       </div>
+    </div>
   </div>
 </template>
 
@@ -285,12 +516,9 @@ import World from './components/world'
 
 
 export default {
-  name: 'sat_orbit',
+  name: 'SatOrbit',
   components: {
     World,
-  },
-  mounted() {
-    this.clickRotate()
   },
   data() {
     return {
@@ -304,7 +532,7 @@ export default {
         time_after: new Date(Date.now()+60*60*1000),
         cover_angle:25,
       },
-      orbit_show_list: { 
+      orbit_show_list: {
                 "天仪33卫星":false,"丽泽一号":false,"宝酝号":false,"创星雷神号":false,"元光号":false,
                 "北邮一号":false,"天算9号":false,"天算10号":false,"天算11号":false,"天算12号":false,
                 "天算13号":false,"天算14号":false,"天算15号":false,"天算16号":false,"天算17号":false,
@@ -337,6 +565,9 @@ export default {
       station_name: "天算华东站",
       showBigData:false,
     }
+  },
+  mounted() {
+    this.clickRotate()
   },
   methods: {
     toOrbit(){
